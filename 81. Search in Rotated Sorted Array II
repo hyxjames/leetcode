@@ -1,0 +1,38 @@
+bool search(vector<int>& nums, int target) {
+        if(nums.size()>0){
+            return searchHelper(nums, target, 0, nums.size()-1);
+        } else{
+            return false;
+        }
+    }
+    
+    bool searchHelper(vector<int>& nums, int target, int begin, int end){
+        bool result = false;
+        if(begin == end){
+            result = (nums[begin]==target);
+        } else if(end-begin==1){
+            result = (nums[begin]==target) || (nums[end]==target);
+        }else{
+            int mid = (begin+end)/2;
+            if(nums[mid] == target){
+                result = true;
+            } else{
+                if(nums[mid] > nums[begin]){
+                    if(target<nums[mid] && target>=nums[begin]){
+                        result = searchHelper(nums, target, begin, mid-1);
+                    } else{
+                        result = searchHelper(nums, target, mid+1, end);
+                    }
+                } else if(nums[mid] < nums[end]){
+                    if(target>nums[mid] && target<=nums[end]){
+                        result = searchHelper(nums, target, mid+1, end);
+                    } else{
+                        result = searchHelper(nums, target, begin, mid-1);
+                    }
+                } else{
+                    result = searchHelper(nums, target, begin, mid-1) || searchHelper(nums, target, mid+1, end);
+                }
+            }
+        }
+        return result;
+    }
