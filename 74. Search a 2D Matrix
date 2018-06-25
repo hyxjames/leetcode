@@ -1,0 +1,50 @@
+bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.size()>0 && matrix[0].size()>0){
+            return searchMatrixHelper(matrix, target, 0, matrix.size()-1);
+        } else{
+            return false;
+        }
+    }
+    
+    bool searchMatrixHelper(vector<vector<int>>& matrix, int target, int begin, int end){
+        bool result = false;
+        int midL = (begin+end)/2;
+        if(matrix[midL][0]>target){
+            if(end > begin){
+                result = searchMatrixHelper(matrix, target, begin, midL-1);
+            } else {
+                result = false;
+            }
+        } else if(matrix[midL][matrix[midL].size()-1]<target){
+            if(end > begin){
+                result = searchMatrixHelper(matrix, target, midL+1, end);
+            } else {
+                result = false;
+            }
+        } else{
+            result = searchLine(matrix[midL], target, 0, matrix[midL].size()-1);
+        }
+        return result;
+    }
+    
+    bool searchLine(vector<int> line, int target, int begin, int end){
+        //cout<<"searchLine"<<begin<<", "<<end<<endl;
+        bool result = false;
+        if(end-begin <= 1) {
+            for(int i=begin;i<=end;i++){
+                if(line[i] == target){
+                    result = true;
+                }
+            }
+        } else {
+            int mid = (begin+end)/2;
+            if(line[mid]>target){
+                result = searchLine(line, target, begin, mid-1);
+            } else if(line[mid]<target){
+                result = searchLine(line,target,mid+1,end);
+            } else{
+                result = true;
+            }
+        }
+        return result;
+    }
