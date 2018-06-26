@@ -1,0 +1,69 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        vector<int> zeros;
+        int result = 0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]==0){
+                zeros.push_back(i);
+            }
+        }
+        if(zeros.size()==0){
+            result = maxProductHelper(nums,0,nums.size()-1);
+        } else{
+            for(int i=0;i<zeros.size();i++){
+                int begin = zeros[i]+1;
+                int end = 0;
+                if(i < zeros.size()-1){
+                    end = zeros[i+1]-1;
+                } else{
+                    end = nums.size()-1;
+                }
+                if(end>=begin && begin>=0 && end<nums.size()){
+                    int p = maxProductHelper(nums, begin, end);
+                    result = result>p?result:p;
+                }
+            }
+            if((zeros[0]-1)>=0){
+                int p = maxProductHelper(nums,0,zeros[0]-1);
+                result = result>p?result:p;
+            }
+        }
+        return result;
+    }
+    
+    int maxProductHelper(vector<int>& nums, int begin, int end){
+        vector<int> negs;
+        int result = 1;
+        for(int i=begin;i<=end;i++){
+            if(nums[i]<0){
+                negs.push_back(i);
+            }
+        }
+        if(negs.size()%2 == 0){
+            for(int i=begin;i<=end;i++){
+                result *= nums[i];
+            }
+        } else{
+            int l = 1;
+            int r = 1;
+            if(negs[0] == begin && negs.size()==1){
+                l = nums[begin];
+            } else{
+                for(int i=begin;i<negs[negs.size()-1];i++){
+                    l *= nums[i];
+                }
+            }
+            if(negs[negs.size()-1] == end && negs.size()==1){
+                r = nums[end];
+            } else{
+                for(int i=negs[0]+1;i<=end;i++){
+                    r *= nums[i];
+                }
+            }
+            result = l>r?l:r;
+        }
+       // cout<<begin<<", "<<end<<", "<<result<<endl;
+        return result;
+    }
+};
