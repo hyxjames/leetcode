@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
+        vector<string> result;
+        int left = lower;
+        int right = upper;
+        if(nums.size() == 0){
+            setInterval(result, lower, upper);
+        } else{
+            if(nums[0]!=lower){
+                setInterval(result, lower, nums[0]-1);
+            }
+            for(int i=0;i<nums.size()-1;i++){
+                if(nums[i]!=INT_MAX && nums[i+1]!=INT_MIN){
+                    setInterval(result, nums[i]+1, nums[i+1]-1);
+                }
+            }
+            if(nums[nums.size()-1] == upper){
+                ;
+            } else{
+                setInterval(result, nums[nums.size()-1]+1, upper);
+            }
+        }
+        return result;
+    }
+    
+    void setInterval(vector<string>& intervals, int left, int right){
+        cout<<left<<", "<<right<<endl;
+        string result="";
+        if(left == right){
+            result = to_string(left);
+            cout<<result<<endl;
+            intervals.push_back(result);
+        } else if(right > left){
+            result = to_string(left)+"->"+to_string(right);
+            //cout<<result<<endl;
+            intervals.push_back(result);
+        } else{
+            ;
+        }
+        return;
+    }
+};
