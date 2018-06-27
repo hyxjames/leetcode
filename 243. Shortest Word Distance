@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int shortestDistance(vector<string>& words, string word1, string word2) {
+        int pos1=INT_MAX;
+        int pos2=INT_MAX;
+        int result = words.size();
+        for(int i=0;i<words.size();i++){
+            if(words[i] == word1){
+                pos1 = i;
+                result = result<abs(pos1-pos2)?result:abs(pos1-pos2);
+            } else if(words[i] == word2){
+                pos2 = i;
+                result = result<abs(pos1-pos2)?result:abs(pos1-pos2);
+            }
+        }
+        return result;
+    }
+};
