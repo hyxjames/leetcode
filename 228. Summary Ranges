@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> result;
+        if(nums.size()>0){
+            int l = nums[0];
+            int r = nums[0];
+            for(int i=1;i<nums.size();i++){
+                if(nums[i]-1>nums[i-1]){
+                    setInterval(result,l,r);
+                    l = nums[i];
+                    r = nums[i];
+                } else{
+                    r++;
+                }
+            }
+            setInterval(result,l,r);
+        }
+        return result;
+    }
+    
+    void setInterval(vector<string>& intervals, int left, int right){
+        //cout<<left<<", "<<right<<endl;
+        string result="";
+        if(left == right){
+            result = to_string(left);
+            //cout<<result<<endl;
+            intervals.push_back(result);
+        } else if(right > left){
+            result = to_string(left)+"->"+to_string(right);
+            //cout<<result<<endl;
+            intervals.push_back(result);
+        } else{
+            ;
+        }
+        return;
+    }
+};
