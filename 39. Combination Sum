@@ -1,0 +1,67 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> result;
+        if(candidates.size() == 0){
+            ;
+        } else{
+            result = combinationSumHelper(candidates, target, 0);
+        }
+        return result;
+    }
+    
+    vector<vector<int>> combinationSumHelper(vector<int>& candidates, int target, int begin) {
+        //cout<<begin<<", "<<target<<endl;
+        vector<vector<int>> result;
+        if(begin>=candidates.size()){
+            return result;
+        } else if(begin == candidates.size()-1){
+            if(target%candidates[begin] == 0){
+                vector<int> v;
+                for(int i=0;i<target/candidates[begin];i++){
+                    v.push_back(candidates[begin]);
+                }
+                result.push_back(v);
+            }
+            return result;
+        }
+        if(target == candidates[begin]){
+            vector<int> v;
+            v.push_back(target);
+            result.push_back(v);
+            begin++;
+            vector<vector<int>> vv = combinationSumHelper(candidates, target, begin);
+            if(vv.size()>0){
+                result.insert(result.end(), vv.begin(), vv.end());
+            }
+        } else if(target > candidates[begin]){
+            int t = target;
+            int c0 = candidates[begin];
+            begin++;
+            int count = 0;
+            while(t > 0){
+                vector<vector<int>> vv = combinationSumHelper(candidates, t, begin);
+                for(int j=0;j<vv.size();j++){
+                    for(int k = 0;k<count;k++)
+                        vv[j].push_back(c0);
+                }
+                if(vv.size()>0){
+                    result.insert(result.end(), vv.begin(), vv.end());
+                }
+                t = t-c0;
+                count++;
+            }
+            if(t == 0){
+                vector<int> v;
+                for(int i=0;i<count;i++){
+                    v.push_back(c0);
+                }
+                result.push_back(v);
+            }
+        } else{
+            begin++;
+            result = combinationSumHelper(candidates, target, begin);
+        }
+        return result;
+    }
+};
