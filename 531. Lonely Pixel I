@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int findLonelyPixel(vector<vector<char>>& picture) {
+        int result = 0;
+        vector<int> col(picture[0].size(),-1);
+        vector<int> row(picture.size(),-1);
+        for(int i=0;i<picture.size();i++){
+            for(int j=0;j<picture[0].size();j++){
+                if(picture[i][j]=='B'){
+                    if(row[i]==-1){
+                        row[i] = j;
+                    } else{
+                        row[i] = -2;
+                    }
+                    col[j]++;
+                }
+            }
+        }
+        for(int i=0;i<row.size();i++){
+            if(row[i]>=0 && col[row[i]]==0){
+                result++;
+            }
+        }
+        return result;
+    }
+};
