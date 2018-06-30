@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int arrayPairSum(vector<int>& nums) {
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for(int i=0;i<nums.size();i++){
+            pq.push(nums[i]);
+        }
+        int result = 0;
+        for(int i=0;i<nums.size()/2;i++){
+            result += pq.top();
+            pq.pop();
+            pq.pop();
+        }
+        return result;
+    }
+};
