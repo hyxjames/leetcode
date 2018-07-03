@@ -1,0 +1,75 @@
+class Solution {
+public:
+    int longestLine(vector<vector<int>>& M) {
+        vector<vector<int>> dpRow;
+        int result = 0;
+        for(int i=0;i<M.size();i++){
+            vector<vector<int>> newDpRow;
+            for(int k=0;k<4;k++){
+                vector<int> v;
+                newDpRow.push_back(v);
+            }
+            for(int j=0;j<M[i].size();j++){
+                if(i==0 && j==0){
+                    if(M[i][j] == 1){
+                        result = 1;
+                        for(int k=0;k<4;k++){
+                            newDpRow[k].push_back(1);
+                        }
+                    } else{
+                        for(int k=0;k<4;k++)
+                            newDpRow[k].push_back(0);
+                    }
+                } else if(i==0){
+                    if(M[i][j]==1){
+                        newDpRow[0].push_back(newDpRow[0][j-1]+1);
+                        newDpRow[1].push_back(1);
+                        newDpRow[2].push_back(1);
+                        newDpRow[3].push_back(1);
+                        if(1>result) result = 1;
+                        if(newDpRow[0][j-1]+1>result) result = newDpRow[0][j-1]+1;
+                    } else{
+                        for(int k=0;k<4;k++){
+                            newDpRow[k].push_back(0);
+                        }
+                    }
+                } else{
+                    if(M[i][j]==1){
+                        int ver = dpRow[1][j]+1;
+                        int hor = 1;
+                        int diag = 1;
+                        int antiDiag = 1;
+                        if(j>0){
+                            hor = newDpRow[0][j-1]+1;
+                            diag = dpRow[2][j-1]+1;
+                        }
+                        if(j<dpRow.size()-1){
+                            antiDiag = dpRow[3][j+1]+1;
+                        }
+                        if(hor>result) result = hor;
+                        if(ver>result) result = ver;
+                        if(diag>result) result = diag;
+                        if(antiDiag>result) result = antiDiag;
+                        newDpRow[0].push_back(hor);
+                        newDpRow[1].push_back(ver);
+                        newDpRow[2].push_back(diag);
+                        newDpRow[3].push_back(antiDiag);
+                    } else{
+                        for(int k=0;k<4;k++){
+                            newDpRow[k].push_back(1);
+                        }
+                    }
+                }
+                for(int jj=0;jj<4;jj++){
+            for(int k=0;k<newDpRow.size();k++){
+                cout<<newDpRow[jj][k]<<", ";
+            }
+                cout<<endl;
+            }
+            }
+            
+            dpRow = newDpRow;
+        }
+        return result;
+    }
+};
