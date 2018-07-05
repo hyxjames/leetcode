@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int findShortestSubArray(vector<int>& nums) {
+        unordered_map<int,int> leftMap;
+        unordered_map<int,int> rightMap;
+        int maxFreq = 0;
+        unordered_map<int,int> freqSet;
+        for(int i=0;i<nums.size();i++){
+            if(freqSet.find(nums[i]) == freqSet.end()){
+                freqSet[nums[i]] = 1;
+                maxFreq = maxFreq>1?maxFreq:1;
+                leftMap[nums[i]] = i;
+                rightMap[nums[i]] = i;
+            } else{
+                freqSet[nums[i]]++;
+                int f = freqSet[nums[i]];
+                maxFreq = maxFreq>f?maxFreq:f;
+                rightMap[nums[i]] = i;
+            }
+        }
+        int result = INT_MAX;
+        for (auto it = freqSet.begin(); it != freqSet.end(); ++it){
+            if(it->second == maxFreq){
+                int i = it->first;
+                int length = rightMap[i]-leftMap[i]+1;
+                result = result<length?result:length;
+            }
+        }
+        return result;
+    }
+};
