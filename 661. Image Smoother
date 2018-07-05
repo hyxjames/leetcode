@@ -1,0 +1,54 @@
+class Solution {
+public:
+    vector<vector<int>> imageSmoother(vector<vector<int>>& M) {
+        vector<vector<int>> result;
+        for(int i=0;i<M.size();i++){
+            vector<int> v;
+            for(int j=0;j<M[i].size();j++){
+                int i1 = i-1;
+                int i2 = i+1;
+                int j1 = j-1;
+                int j2 = j+1;
+                int cnt = 0;
+                int sum = 0;
+                sum += M[i][j];
+                cnt++;
+                if(j1>=0){
+                    sum += M[i][j1];
+                        cnt++;
+                }
+                if(j2<M[i].size()){
+                    sum += M[i][j2];
+                        cnt++;
+                }
+                if(i1>=0){
+                    sum += M[i1][j];
+                    cnt++;
+                    if(j1>=0){
+                        sum += M[i1][j1];
+                        cnt++;
+                    }
+                    if(j2<M[i].size()){
+                        sum += M[i1][j2];
+                        cnt++;
+                    }
+                }
+                if(i2<M.size()){
+                    sum += M[i2][j];
+                    cnt++;
+                    if(j1>=0){
+                        sum += M[i2][j1];
+                        cnt++;
+                    }
+                    if(j2<M[i].size()){
+                        sum += M[i2][j2];
+                        cnt++;
+                    }
+                }
+                v.push_back(sum/cnt);
+            }
+            result.push_back(v);
+        }
+        return result;
+    }
+};
