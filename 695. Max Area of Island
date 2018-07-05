@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int result = 0;
+        queue<int> row;
+        queue<int> column;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[i].size();j++){
+                int area = 0;
+                if(grid[i][j] == 1){
+                    grid[i][j] = 0;
+                    row.push(i);
+                    column.push(j);
+                    while(!row.empty()){
+                        area++;
+                        int ii = row.front();
+                        int jj = column.front();
+                        row.pop();
+                        column.pop();
+                        //cout<<"queue "<<ii<<", "<<jj<<endl;
+                        if(ii-1 >= 0){
+                            if(grid[ii-1][jj] == 1){
+                                row.push(ii-1);
+                                column.push(jj);
+                                grid[ii-1][jj] = 0;
+                            }
+                        }
+                        if(ii+1<grid.size()){
+                            if(grid[ii+1][jj] == 1){
+                                row.push(ii+1);
+                                column.push(jj);
+                                grid[ii+1][jj] = 0;
+                            }
+                        }
+                        if(jj-1>=0 && grid[ii][jj-1]==1){
+                            row.push(ii);
+                            column.push(jj-1);
+                            grid[ii][jj-1] = 0;
+                        }
+                        if(jj+1<grid[0].size() && grid[ii][jj+1]==1){
+                            row.push(ii);
+                            column.push(jj+1);
+                            grid[ii][jj+1] = 0;
+                        }
+                    }
+                }
+                //cout<<i<<", "<<j<<endl;
+                result = result>area?result:area;
+                /*for(int ii=0;ii<grid.size();ii++){
+                    for(int jj=0;jj<grid[i].size();jj++){
+                        cout<<grid[ii][jj]<<", ";
+                    }
+                    cout<<endl;
+                }
+                cout<<"================================="<<endl;*/
+            }
+        }
+        return result;
+    }
+};
