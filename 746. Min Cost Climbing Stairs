@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        vector<int> dp;
+        for(int i=0;i<cost.size();i++){
+            if(i==0){
+                dp.push_back(cost[0]);
+            } else if(i==1){
+                dp.push_back(cost[1]);
+            } else{
+                int c = (dp[i-2]<dp[i-1]?dp[i-2]:dp[i-1])+cost[i];
+                dp.push_back(c);
+            }
+        }
+        int result = 0;
+        if(dp.size()==1){
+            result = dp[0];
+        } else if(dp.size()>1){
+            int c1 = dp[dp.size()-2];
+            int c2 = dp[dp.size()-1];
+            result = c1<c2?c1:c2;
+        }
+        return result;
+    }
+};
