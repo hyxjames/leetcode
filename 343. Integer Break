@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int integerBreak(int n) {
+        vector<int> maxs;
+        for(int i=0;i<=n;i++){
+            int num = i;
+            if(i <= 2){
+                maxs.push_back(1);
+            } else{
+                int max = 0;
+                for(int j=1;j<=num/2;j++){
+                    int n1 = j;
+                    int n2 = num-j;
+                    int m = (n1>maxs[n1]?n1:maxs[n1])*(n2>maxs[n2]?n2:maxs[n2]);
+                    max = max>m?max:m;
+                }
+                maxs.push_back(max);
+            }
+        }
+        return maxs[maxs.size()-1];
+    }
+};
