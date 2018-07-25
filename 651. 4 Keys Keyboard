@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int maxA(int N) {
+        vector<int> res;
+        res.push_back(0);
+        for(int i=1;i<=N;i++){
+            int num = res[i-1]+1;
+            for(int x=0;x<i;x++){
+                num = max(num, res[x]*(i-x-1));
+            }
+            res.push_back(num);
+        }
+        return res[res.size()-1];
+    }
+};
