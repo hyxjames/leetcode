@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        if(s.size()==0){
+            return s;
+        }
+        int lastPos = 0;
+        for(int i=0;i<s.size();i++){
+            if(s[i]==' '){
+                //cout<<lastPos<<", "<<i<<endl;
+                for(int j=lastPos;j<(lastPos+i)/2;j++){
+                    char t= s[j];
+                    s[j] = s[i-1-j+lastPos];
+                    s[i-1-j+lastPos] = t;
+                    //cout<<s<<endl;
+                }
+                lastPos = i+1;
+            }
+        }
+        for(int j=lastPos;j<(s.size()+lastPos)/2;j++){
+            char t= s[j];
+            s[j] = s[s.size()-1-j+lastPos];
+            s[s.size()-1-j+lastPos] = t;
+        }
+        return s;
+    }
+};
