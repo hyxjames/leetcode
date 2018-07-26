@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, int> map;
+        for(int i=0;i<s.size();i++){
+            if(map.find(s[i])==map.end()){
+                map[s[i]] = i;
+            } else{
+                map[s[i]] = -1;
+            }
+        }
+        int res = -1;
+        for(auto it=map.begin();it!=map.end();it++){
+            if(it->second>=0){
+                if(res < 0){
+                    res = it->second;
+                } else if(it->second<res){
+                    res = it->second;
+                }
+            }
+        }
+        return res;
+    }
+};
