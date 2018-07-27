@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string nextClosestTime(string time) {
+        unordered_set<int> digits;
+        string result = "";
+        int min = INT_MAX;
+        for(int i=0;i<time.size();i++){
+            digits.insert(time[i]-'0');
+        }
+        int cur = 60*(10*(time[0]-'0')+(time[1]-'0')) + 10*(time[3]-'0')+time[4]-'0';
+        for(int i=0;i<24;i++){
+            for(int j=0;j<60;j++){
+                if(digits.find(i/10)!=digits.end() && digits.find(i%10)!=digits.end()
+                  && digits.find(j/10)!=digits.end() && digits.find(j%10)!=digits.end()){
+                    int t = 60*i + j;
+                    //cout<<cur<<", "<<t<<endl;
+                    int diff = t-cur;
+                    if(diff <= 0){
+                        diff = 24*60+diff;
+                    }
+                    if(diff<min){
+                        result = "";
+                        min = diff;
+                        if(i<10){
+                            result.push_back('0');
+                        }
+                        result.append(to_string(i));
+                        result.push_back(':');
+                        if(j<10){
+                            result.push_back('0');
+                        }
+                        result.append(to_string(j));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
