@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string tree2str(TreeNode* t) {
+        string result = "";
+        if(t == NULL){
+            ;
+        } else if(t->left==NULL && t->right==NULL){
+            result = to_string(t->val);
+        } else if(t->right==NULL){
+            result.append(to_string(t->val));
+            result.push_back('(');
+            result.append(tree2str(t->left));
+            result.push_back(')');
+        } else{
+            result.append(to_string(t->val));
+            result.push_back('(');
+            result.append(tree2str(t->left));
+            result.push_back(')');
+            result.push_back('(');
+            result.append(tree2str(t->right));
+            result.push_back(')');
+        }
+        return result;
+    }
+};
