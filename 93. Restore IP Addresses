@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> result = restoreAddressHelper(s, 0, 4);
+        for(int i=0;i<result.size();i++){
+            result[i].pop_back();
+        }
+        return result;
+    }
+    
+    vector<string> restoreAddressHelper(string s, int pos, int dots){
+        cout<<pos<<", "<<dots<<endl;
+        vector<string> result;
+        if((dots==0 && pos<s.size()) || (pos>=s.size() && dots>0)){
+            return result;
+        } else if(dots==0 && pos==s.size()){
+            result.push_back("");
+            return result;
+        }
+        if(dots <= s.size()-pos && pos<s.size()){
+            //cout<<"hi1"<<endl;
+            int num = 0;
+            string numStr = "";
+            for(int i=0;i<3;i++){
+                if(pos+i < s.size()){
+                    num = 10*num + s[pos+i]-'0';
+                    //cout<<num<<endl;
+                    if(num <= 255 && (numStr.size()==0 || numStr[0]!='0')){
+                        numStr.push_back(s[pos+i]);
+                        vector<string> res = restoreAddressHelper(s, pos+i+1, dots-1);
+                        if(res.size()>0){
+                            for(int j=0;j<res.size();j++){
+                                string str = "";
+                                str.append(numStr);
+                                str.push_back('.');
+                                str.append(res[j]);
+                                result.push_back(str);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
