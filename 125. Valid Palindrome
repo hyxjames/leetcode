@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        bool res = true;
+        int i = 0;
+        int j = s.size()-1;
+        while(j>i){
+            if(isAlphabet(s[i]) && isAlphabet(s[j])){
+                if(s[i] != s[j] && abs(s[i]-s[j]) != abs('A'-'a')){
+                    res = false;
+                    break;
+                } else{
+                    i++;
+                    j--;
+                }
+            } else if(isAlphabet(s[i])){
+                j--;
+            } else if(isAlphabet(s[j])){
+                i++;
+            } else{
+                i++;
+                j--;
+            }
+        }
+        return res;
+    }
+    
+    bool isAlphabet(char c){
+        return (c>='a'&&c<='z') || (c>='A' && c<='Z');
+    }
+};
