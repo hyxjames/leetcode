@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int pos = 0;
+    
+    NestedInteger deserialize(string s) {
+        NestedInteger ni;
+        int num = 0;
+        bool hasNum = false;
+        bool isPositive = true;
+        if(s[pos]=='-'){
+            isPositive = false;
+            pos++;
+        }
+        while(isNum(s[pos])){
+            hasNum = true;
+            num = 10*num + s[pos]-'0';
+            pos++;
+        }
+        if(!isPositive) num = -num;
+        if(hasNum) ni.setInteger(num);
+        if(s[pos]==','){
+            pos++;
+        } else if(s[pos]=='['){
+            pos++;
+            ni.add(deserialize(s.substr(pos)));
+        } else if(s[pos]==']'){
+            pos++;
+        }
+        return ni;
+    }
+    
+    bool isNum(char c){
+        if(c>='0' && c<='9'){
+            return true;
+        } else{
+            return false;
+        }
+    }
+};
