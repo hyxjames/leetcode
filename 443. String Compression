@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        int res = 0;
+        int num = 0;
+        for(int i=0;i<chars.size();i++){
+            if(i==0){
+                res = 1;
+                num = 1;
+            } else if(chars[i-1] == chars[i]){
+                if(num == 1){
+                    num++;
+                    res++;
+                } 
+            } else{
+                res++;
+                num = 1;
+            }
+        }
+        return res;
+    }
