@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        vector<int> times;
+        for(int i=0;i<timePoints.size();i++){
+            string str = timePoints[i];
+            int t = 60*(10*(str[0]-'0')+str[1]-'0')+(str[3]-'0')*10+str[4]-'0';
+            times.push_back(t);
+        }
+        sort(times.begin(), times.end());
+        int res =INT_MAX;
+        int day = 24*60;
+        for(int i=1;i<times.size();i++){
+            int d1 = times[i]-times[i-1];
+            int d2 = day - d1;
+            int diff = d1<d2?d1:d2;
+            res = res<diff?res:diff;
+        }
+        int d1 = times[times.size()-1]-times[0];
+        int d2 = day - d1;
+        int diff = d1<d2?d1:d2;
+        res = res<diff?res:diff;
+        return res;
+    }
+};
