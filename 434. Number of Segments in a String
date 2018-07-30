@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int countSegments(string s) {
+        int i = 0;
+        int res = 0;
+        bool hasLetter = false;
+        while(i<s.size()){
+            if(s[i] != ' '){
+                hasLetter = true;
+            } else{
+                res += hasLetter?1:0;
+                hasLetter = false;
+            }
+            i++;
+        }
+        res += hasLetter?1:0;
+        return res;
+    }
+};
