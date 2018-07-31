@@ -1,0 +1,92 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        queue<TreeNode*> q;
+        string str = "[";
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* t = q.front();
+            q.pop();
+            if(t==NULL){
+                str.append("null,");
+            } else{
+                str.append(to_string(t->val));
+                str.push_back(',');
+                q.push(t->left);
+                q.push(t->right);
+            }
+        }
+        str.pop_back();
+        str.push_back(']');
+        return str;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        cout<<data<<endl;
+        int i=1;
+        TreeNode* root;
+        queue<TreeNode*> q;
+        bool isLeft = true;
+        bool isBegin = true;
+        while(i<data.size()-1){
+            TreeNode* node;
+            if(data[i]=='n' && data[i+1]=='u' && data[i+2]=='l' && data[i+3]=='l'){
+                i += 5;
+                node = NULL;
+                //cout<<"null"<<endl;
+            } else{
+                int num = 0;
+                bool isPos = true;
+                if(data[i]=='-'){
+                    isPos = false;
+                    i++;
+                }
+                while(isdigit(data[i])){
+                    num = 10*num+data[i]-'0';
+                    i++;  
+                }
+                if(!isPos){
+                    num = -num;
+                }
+                i++;
+                //cout<<num<<endl;
+                node = new TreeNode(num);
+            }
+            if(isBegin){
+                q.push(node);
+                root = node;
+                isBegin = false;
+            } else{
+                TreeNode* t = q.front();
+                if(isLeft){
+                    t->left = node;
+                    isLeft = false;
+                } else{
+                    t->right = node;
+                    q.pop();
+                    isLeft = true;
+                }
+                if(node != NULL){
+                    q.push(node);
+                }
+            }
+        }
+        return root;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
