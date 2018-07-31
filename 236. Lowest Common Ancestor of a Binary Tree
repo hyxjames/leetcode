@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int helper(TreeNode* root, TreeNode* p, TreeNode* q, TreeNode* res){
+        if(root == NULL){
+            return 0;
+        } else{
+            if(root->val == p->val || root->val == q->val){
+                //cout<<"fuck17"<<", "<<root->val<<endl;
+                if(helper(root->left,p,q,res) == 1 || helper(root->right,p,q,res) == 1){
+                    //cout<<"fuck"<<endl;
+                    res->val = root->val;
+                    return 2;
+                } else{
+                    return 1;
+                }
+            } else{
+                int l = helper(root->left,p,q,res);
+                int r = helper(root->right,p,q,res);
+                cout<<l<<", "<<r<<endl;
+                if(l==1 && r==1){
+                    //cout<<"res: "<<root->val<<endl;
+                    res->val = root->val;
+                    //cout<<res->val<<endl;
+                }
+                return l+r;
+            }
+        }
+    }
+    
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* res = new TreeNode(0);
+        helper(root, p, q, res);
+        return res;
+    }
+};
