@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int maxValue = INT_MIN;
+        maxHelper(root, maxValue);
+        return maxValue;
+    }
+    
+    int maxHelper(TreeNode* root, int& maxValue){
+        if(root == NULL){
+            maxValue = maxValue>0?maxValue:0;
+            return 0;
+        } else if(root->left==NULL && root->right==NULL){
+            maxValue = maxValue>root->val?maxValue:root->val;
+            return root->val;
+        } else if(root->left == NULL){
+            int r = maxHelper(root->right, maxValue);
+            int v = max(max(root->val, root->val+r),r);
+            maxValue = maxValue>v?maxValue:v;
+            return max(root->val, root->val+r);
+        } else if(root->right == NULL){
+            int l = maxHelper(root->left, maxValue);
+            int v = max(max(root->val, root->val+l),l);
+            maxValue = maxValue>v?maxValue:v;
+            return max(root->val, root->val+l);
+        } else{
+            int left = maxHelper(root->left, maxValue);
+            int right = maxHelper(root->right, maxValue);
+            int value = max(max(max(max(max(root->val, root->val+left), root->val+right), root->val+left+right),left),right);
+            //cout<<left<<", "<<right<<", "<<value<<endl;
+            maxValue = maxValue>value?maxValue:value;
+            //cout<<root->val<<": "<<maxValue<<", "<<left<<", "<<right<<", "<<value<<endl;
+            return max(max(root->val+left, root->val+right),root->val);
+        }
+    }
+};
