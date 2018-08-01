@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        queue<TreeNode*> q;
+        unordered_set<int> set;
+        if(root!=NULL){
+            q.push(root);
+        }
+        while(!q.empty()){
+            TreeNode* t = q.front();
+            q.pop();
+            //cout<<t->val<<", "<<k-t->val<<endl;
+            if(set.find(k-t->val) != set.end()){
+                return true;
+            }
+            if(t->left != NULL){
+                q.push(t->left);
+            }
+            if(t->right != NULL){
+                q.push(t->right);
+            }
+            set.insert(t->val);
+        }
+        return false;
+    }
+};
