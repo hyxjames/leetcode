@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        int height = 0;
+        return helper(root, height);
+    }
+    
+    int helper(TreeNode* root, int& height){
+        if(root->left==NULL && root->right==NULL){
+            height == 0;
+            return root->val;
+        } else if(root->left != NULL && root->right != NULL){
+            int lheight = 0;
+            int rheight = 0;
+            int left = helper(root->left, lheight);
+            int right = helper(root->right, rheight);
+            cout<<root->val<<": "<<lheight<<", "<<rheight<<endl;
+            if(lheight>=rheight){
+                height = lheight+1;
+                return left;
+            } else{
+                height = rheight+1;
+                return right;
+            }
+        } else if(root->left != NULL){
+            int h = 0;
+            int v = helper(root->left, h);
+            height = h+1;
+            return v;
+        } else{
+            int h = 0;
+            int v = helper(root->right, h);
+            height = h+1;
+            return v;
+        }
+    }
+};
