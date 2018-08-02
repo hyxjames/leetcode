@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* upsideDownBinaryTree(TreeNode* root) {
+        if(root==NULL){
+            return NULL;
+        } else{
+            //cout<<root->val<<endl;
+            if(root->left==NULL && root->right==NULL){
+                return root;
+            } else{
+                TreeNode* left = root->left;
+                TreeNode* l = upsideDownBinaryTree(root->right);
+                TreeNode* r = upsideDownBinaryTree(root->left);
+                left->left = l;
+                left->right = r;
+                return left;
+            }
+        }
+    }
+};
