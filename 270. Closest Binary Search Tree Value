@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int closestValue(TreeNode* root, double target) {
+        if(root->val == target){
+            return root->val;
+        } else if(target < root->val){
+            if(root->left){
+                int l = closestValue(root->left, target);
+                return abs(l-target)<abs(root->val-target)?l:root->val;
+            } else{
+                return root->val;
+            }
+        } else{
+            if(root->right){
+                int r = closestValue(root->right, target);
+                return abs(r-target)<abs(root->val-target)?r:root->val;
+            } else{
+                return root->val;
+            }
+        }
+    }
+};
