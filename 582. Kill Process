@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<int> killProcess(vector<int>& pid, vector<int>& ppid, int kill) {
+        unordered_map<int, unordered_set<int>> map;
+        for(int i=0;i<pid.size();i++){
+            int p = pid[i];
+            int pp = ppid[i];
+            if(map.find(pp) == map.end()){
+                unordered_set<int> set;
+                if(pp != 0){
+                    set.insert(p);
+                    map[pp] = set;
+                }
+            } else{
+                map[pp].insert(p);
+            }
+            if(map.find(p) == map.end()){
+                unordered_set<int> set;
+                map[p] = set;
+            }
+        }
+        vector<int> result;
+        queue<int> q;
+        q.push(kill);
+        while(!q.empty()){
+            int k = q.front();
+            q.pop();
+            unordered_set<int> set = map[k];
+            for(auto it = set.begin();it!=set.end();it++){
+                q.push(*it);
+            }
+            map.erase(k);
+            result.push_back(k);
+        }
+        return result;
+    }
+};
