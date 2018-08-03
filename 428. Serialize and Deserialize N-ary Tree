@@ -1,0 +1,64 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val = NULL;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(Node* root) {
+        string result = "";
+        if(!root){
+            result.push_back('[');
+            if(root->children.size()>0){
+                for(int i=0;i<root->children.size();i++){
+                    result.append(to_string(root->children[i]->val));
+                    result.append(serialize(root->children[i]));
+                    result.push_back(' ');
+                }
+            }
+            result.push_back(']');
+        }
+        cout<<result<<endl;
+        return result;
+    }
+
+    // Decodes your encoded data to tree.
+    Node* deserialize(string data) {
+        int pos = 1;
+        return deserializeHelper(data, pos);
+    }
+    
+    Node* deserializeHelper(string& data, int& pos){
+        Node* n;
+        while(data[pos] != ']' && pos<data.size()){
+            int num = 0;
+            if(data[pos] == ' '){
+                pos++;
+                num = 0;
+            } else if(isdigit(data[pos])){
+                while(isdigit(data[pos])){
+                    num = 10*num+data[pos]-'0';
+                    pos++;
+                }
+                n = new Node(num);
+            } else if(data[pos] == '['){
+                pos++;
+                n->children.push_back(deserializeHelper(data, pos));
+            }
+        }
+        pos++;
+        return n;
+    }
+};
