@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> result;
+        queue<TreeNode*> q;
+        if(root){
+            q.push(root);
+            q.push(NULL);
+        }
+        int m = INT_MIN;
+        while(!q.empty()){
+            TreeNode* n = q.front();
+            q.pop();
+            if(n){
+                m = max(m, n->val);
+                if(n->left){
+                    q.push(n->left);
+                }
+                if(n->right){
+                    q.push(n->right);
+                }
+            } else{
+                result.push_back(m);
+                if(!q.empty()){
+                    q.push(NULL);
+                }
+                m = INT_MIN;
+            }
+        }
+        return result;
+    }
+};
