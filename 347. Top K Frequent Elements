@@ -1,0 +1,41 @@
+class Solution {
+public:
+    class Obj{
+        public:
+        int val = 0;
+        int freq = 0;
+        Obj(int val, int freq){
+            this->val = val;
+            this->freq = freq;
+        }
+    };
+    
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> map;
+        for(int i=0;i<nums.size();i++){
+            if(map.find(nums[i]) == map.end()){
+                map[nums[i]] = 1;
+            } else{
+                map[nums[i]]++;
+            }
+        }
+        priority_queue<Obj*, vector<Obj*>, myLess> pq;
+        for(auto it=map.begin();it!=map.end();it++){
+            Obj* obj = new Obj(it->first, it->second);
+            pq.push(obj);
+        }
+        vector<int> result;
+        for(int i=0;i<k;i++){
+            Obj* o = pq.top();
+            result.push_back(o->val);
+            pq.pop();
+        }
+        return result;
+    }
+    
+    struct myLess {
+        bool operator()(Obj* const & p1, Obj* const & p2) {
+            return p1->freq < p2->freq;
+        }
+    };
+};
