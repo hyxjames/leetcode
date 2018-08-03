@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        if(!root)
+            return 0;
+        unordered_map<int, vector<int>> map;
+        int result = 0;
+        helper(root, map, 0, 0);
+        for(auto it=map.begin();it!=map.end();it++){
+            result = max((it->second)[1] - (it->second)[0], result);
+        }
+        return result+1;
+    }
+    
+    void helper(TreeNode* root, unordered_map<int, vector<int>>& map, int height, int pos){
+        if(root){
+            if(map.find(height) == map.end()){
+                vector<int> range;
+                range.push_back(pos);
+                range.push_back(pos);
+                map[height] = range;
+            } else{
+                map[height][0] = min(map[height][0], pos);
+                map[height][1] = max(map[height][1], pos);
+            }
+            helper(root->left, map, height+1, 2*pos);
+            helper(root->right, map, height+1, 2*pos+1);
+        } 
+    }
+};
