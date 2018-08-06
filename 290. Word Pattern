@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        unordered_map<char, string> map;
+        unordered_map<string, char> map1;
+        int pos = 0;
+        for(int i=0;i<pattern.size();i++){
+            string word = "";
+            while(str[pos] != ' ' && pos<str.size()){
+                word.push_back(str[pos]);
+                pos++;
+            }
+            pos++;
+            if(word == ""){
+                return false;
+            }
+            //cout<<pattern[i]<<", "<<word<<endl;
+            if(map.find(pattern[i]) == map.end()){
+                map[pattern[i]] = word;
+            } else{
+                if(map[pattern[i]] != word){
+                    return false;
+                }
+            }
+            if(map1.find(word) == map1.end()){
+                map1[word] = pattern[i];
+            } else{
+                if(map1[word] != pattern[i]){
+                    return false;
+                }
+            }
+        }
+        //cout<<pos<<" "<<str.size()<<endl;
+        if(pos < str.size()){
+            return false;
+        }
+        return true;
+    }
+};
