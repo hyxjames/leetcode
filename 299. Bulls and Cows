@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        unordered_map<char, int> map;
+        int bull = 0;
+        int cow = 0;
+        int j = 0;
+        for(int i = 0;i<secret.size();i++){
+            if(secret[i] == guess[j]){
+                bull++;
+                guess.erase(j,1);
+                j--;
+            } else{
+                if(map.find(secret[i]) == map.end()){
+                    map[secret[i]] = 1;
+                } else{
+                    map[secret[i]]++;
+                }
+            }
+            j++;
+        }
+        for(int i=0;i<guess.size();i++){
+            if(map.find(guess[i])!=map.end() && map[guess[i]]>0){
+                cow++;
+                map[guess[i]]--;
+            }
+        }
+        string result = "";
+        result.append(to_string(bull));
+        result.append("A");
+        result.append(to_string(cow));
+        result.append("B");
+        return result;
+    }
+};
