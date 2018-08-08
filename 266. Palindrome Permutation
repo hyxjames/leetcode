@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool canPermutePalindrome(string s) {
+        unordered_map<char, int> map;
+        for(int i=0;i<s.size();i++){
+            map[s[i]]++;
+        }
+        int oddNum = 0;
+        for(auto it=map.begin();it!=map.end();it++){
+            if(it->second%2==1){
+                oddNum++;
+            }
+            if(oddNum>1)
+                break;
+        }
+        return oddNum<=1;
+    }
+};
