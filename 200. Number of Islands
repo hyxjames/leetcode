@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int result = 0;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]=='1'){
+                    result++;
+                    stack<vector<int>> st;
+                    vector<int> p;
+                    p.push_back(i);
+                    p.push_back(j);
+                    st.push(p);
+                    grid[i][j] = '0';
+                    while(!st.empty()){
+                        vector<int> point = st.top();
+                        st.pop();
+                        int ii = point[0];
+                        int jj = point[1];
+                        if(ii>0){
+                            vector<int> p1;
+                            if(grid[ii-1][jj]=='1'){
+                                p1.push_back(ii-1);
+                                p1.push_back(jj);
+                                st.push(p1);
+                                grid[ii-1][jj]='0';
+                            }
+                        }
+                        if(ii<grid.size()-1){
+                            vector<int> p1;
+                            if(grid[ii+1][jj]=='1'){
+                                p1.push_back(ii+1);
+                                p1.push_back(jj);
+                                st.push(p1);
+                                grid[ii+1][jj]='0';
+                            }
+                        }
+                        if(jj>0){
+                            vector<int> p1;
+                            if(grid[ii][jj-1]=='1'){
+                                p1.push_back(ii);
+                                p1.push_back(jj-1);
+                                st.push(p1);
+                                grid[ii][jj-1]='0';
+                            }
+                        }
+                        if(jj<grid[0].size()-1){
+                            vector<int> p1;
+                            if(grid[ii][jj+1]=='1'){
+                                p1.push_back(ii);
+                                p1.push_back(jj+1);
+                                st.push(p1);
+                                grid[ii][jj+1]='0';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
