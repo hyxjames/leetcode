@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int pos = 0;
+        int val = 0;
+        helper(nums, S-nums[pos], pos+1, val);
+        helper(nums, S+nums[pos], pos+1, val);
+        return val;
+    }
+    
+    void helper(vector<int>& nums, int S, int pos, int& val){
+        if(pos >= nums.size()){
+            if(S == 0)
+                val++;
+        } else{
+            helper(nums, S-nums[pos], pos+1, val);
+            helper(nums, S+nums[pos], pos+1, val);
+        }
+    }
+};
