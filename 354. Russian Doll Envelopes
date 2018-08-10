@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maxEnvelopes(vector<pair<int, int>>& envelopes) {
+        if(envelopes.size()==0)
+            return 0;
+        sort(envelopes.begin(),envelopes.end(),cmp);
+        int dp[envelopes.size()] = {1};
+        for(int i=1;i<envelopes.size();i++){
+            for(int j=0;j<i;j++){
+                if(envelopes[j].first<envelopes[i].first && envelopes[j].second<envelopes[i].second){
+                    dp[i] = max(dp[i],dp[j]+1);
+                }
+            }
+        }
+        return dp[envelopes.size()-1];
+    }
+    
+    static bool cmp(pair<int,int>p1, pair<int,int>p2){
+        if(p1.first<p2.first){
+            return true;
+        } else{
+            return p1.second<p2.second;
+        }
+    }
+};
+
+//there is a nlogn solution
