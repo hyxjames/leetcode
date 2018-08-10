@@ -1,0 +1,114 @@
+class Solution {
+public:
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        int i = click[0];
+        int j = click[1];
+        if(board[i][j] == 'M'){
+            board[i][j] = 'X';
+        } else if(board[i][j]=='E'){
+            int mineNum = 0;
+            if(i>0){
+                if(board[i-1][j]=='X' || board[i-1][j]=='M')
+                    mineNum++;
+            }
+            if(j>0){
+                if(board[i][j-1]=='X' || board[i][j-1]=='M')
+                    mineNum++;
+            }
+            if(i<board.size()-1){
+                if(board[i+1][j]=='X' || board[i+1][j]=='M')
+                    mineNum++;
+            }
+            if(j<board[0].size()-1){
+                if(board[i][j+1]=='X' || board[i][j+1]=='M')
+                    mineNum++;
+            }
+            if(i>0 && j>0){
+                if(board[i-1][j-1]=='X' || board[i-1][j-1]=='M')
+                    mineNum++;
+            }
+            if(i>0 && j<board[0].size()-1){
+                if(board[i-1][j+1]=='X' || board[i-1][j+1]=='M')
+                    mineNum++;
+            }
+            if(i<board.size()-1 && j>0){
+                if(board[i+1][j-1]=='X' || board[i+1][j-1]=='M')
+                    mineNum++;
+            }
+            if(i<board.size()-1 && j<board[0].size()-1){
+                if(board[i+1][j+1]=='X' || board[i+1][j+1]=='M')
+                    mineNum++;
+            }
+            if(mineNum == 0){
+                board[i][j]='B';
+                if(i>0){
+                    if(board[i-1][j]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i-1);
+                        clk.push_back(j);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(j>0){
+                    if(board[i][j-1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i);
+                        clk.push_back(j-1);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(i<board.size()-1){
+                    if(board[i+1][j]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i+1);
+                        clk.push_back(j);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(j<board[0].size()-1){
+                    if(board[i][j+1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i);
+                        clk.push_back(j+1);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(i>0 && j>0){
+                    if(board[i-1][j-1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i-1);
+                        clk.push_back(j-1);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(i>0 && j<board[0].size()-1){
+                    if(board[i-1][j+1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i-1);
+                        clk.push_back(j+1);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(i<board.size()-1 && j>0){
+                    if(board[i+1][j-1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i+1);
+                        clk.push_back(j-1);
+                        updateBoard(board, clk);
+                    }
+                }
+                if(i<board.size()-1 && j<board[0].size()-1){
+                    if(board[i+1][j+1]=='E'){
+                        vector<int> clk;
+                        clk.push_back(i+1);
+                        clk.push_back(j+1);
+                        updateBoard(board, clk);
+                    }
+                }
+            } else{
+                board[i][j] = mineNum+'0';
+            }
+        }
+        return board;
+    }
+};
