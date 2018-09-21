@@ -1,0 +1,72 @@
+class TrieNode{
+public:
+    char c = ' ';
+    unordered_map<char, TrieNode*> map;
+    TrieNode(char c){
+        this->c = c;
+    }
+};
+
+class WordDictionary {
+public:
+    /** Initialize your data structure here. */
+    TrieNode* root;
+    WordDictionary() {
+        root = new TrieNode(' ');
+    }
+    
+    /** Adds a word into the data structure. */
+    void addWord(string word) {            
+        TrieNode* curNode = root;
+        for(int i=0;i<word.size();i++){
+            char c = word[i];
+            if(curNode->map.find(c) == curNode->map.end()){
+                TrieNode* node = new TrieNode(c);
+                curNode->map[c] = node;
+                curNode = node;
+            } else{
+                curNode = curNode->map[c];
+            }
+        }
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    bool search(string word) {
+        return searchHelper(root, word, 0);
+    }
+    
+    bool searchHelper(TrieNode* node, string& word, int pos){
+        TrieNode* curNode = node;
+        for(int i=pos;i<word.size();i++){
+            char c = word[i];
+            if(c == '.'){
+                if(curNode->map.size()==0){
+                    return false;
+                }
+                bool result = false;
+                for(auto it = curNode->map.begin();it!=curNode->map.end();it++){
+                    if(searchHelper(it->second, word, i+1)){
+                        //curNode = it->second;
+                        return true;
+                    }
+                }
+                return result;
+            } else{
+                //cout<<curNode->c<<": "<<curNode->map.size()<<endl;
+                if(curNode->map.find(c) == curNode->map.end()){
+                    return false;
+                } else{
+                    curNode = curNode->map[c];
+                }
+            }
+        }
+        return true;
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * bool param_2 = obj.search(word);
+ */
