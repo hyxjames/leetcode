@@ -1,0 +1,82 @@
+class Node{
+public:
+    int l, r, sum = 0;
+    Node* lChild = NULL;
+    Node* rChild = NULL;
+};
+
+class NumArray {
+public:
+    Node* root = NULL;
+    NumArray(vector<int> nums) {
+        if(nums.size() > 0){
+            int sum = 0;
+            root = treeConstructor(nums, 0, nums.size()-1, sum);
+        }
+    }
+    
+    Node* treeConstructor(vector<int>& nums, int l, int r, int& sum){            
+        Node* node = new Node();
+        if(l == r){
+            node->l = l;
+            node->r = r;
+            node->sum = nums[l];
+            sum = nums[l];
+        } else{
+            int mid = (l+r)/2;
+            int lSum, rSum;
+            node->lChild = treeConstructor(nums, l, mid, lSum);
+            node->rChild = treeConstructor(nums, mid+1, r, rSum);
+            node->l = l;
+            node->r = r;
+            sum = lSum+rSum;
+            node->sum = lSum+rSum;
+        }
+        return node;
+    }
+    
+    void update(int i, int val) {
+        int diff = 0;
+        updateHelper(i, val, root, diff);
+    }
+    
+    void updateHelper(int i, int val, Node* node, int& diff){
+        if(node->l == node->r){
+            diff = val-node->sum;
+            node->sum = val;
+        } else{
+            int mid = (node->l+node->r)/2;
+            if(i <= mid){
+                updateHelper(i, val, node->lChild, diff);
+            } else{
+                updateHelper(i, val, node->rChild, diff);
+            }
+            node->sum += diff;
+        }
+    }
+    
+    int sumRange(int i, int j) {
+        //cout<<i<<", "<<j<<endl;
+        if(i<0 || j<0 || j<i || j>root->r){
+            return 0;
+        }
+        return sumRangeHelper(i, j, root);
+    }
+    
+    int sumRangeHelper(int i, int j, Node* node){
+        int result = 0;
+        //cout<<node->sum<<": "<<i<<", "<<j<<","<<node->l<<", "<<node->r<<endl;
+        if(node->l==i && node->r==j){
+            result = node->sum;
+        } else{
+            int mid = (node->l+node->r)/2;
+            if(i<=mid){
+                result += sumRangeHelper(i, j<mid?j:mid, node->lChild);
+            }
+            if(j>mid){
+                result += sumRangeHelper(i>mid+1?i:mid+1,j,node->rChild);
+            }
+        }
+        return result;
+    }
+};
