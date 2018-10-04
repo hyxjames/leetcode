@@ -1,0 +1,45 @@
+class Solution {
+public:
+    bool backspaceCompare(string S, string T) {
+        int i = S.size()-1;
+        int j = T.size()-1;
+        while(i>=0 && j>=0){
+                int delS = 0;
+                while(delS>0 || S[i]=='#'){
+                    if(S[i]=='#'){
+                        delS++;
+                    } else{
+                        delS--;
+                    }
+                    i--;
+                }
+                int delT = 0;
+                while(delT>0 || T[j]=='#'){
+                    if(T[j]=='#'){
+                        delT++;
+                    } else{
+                        delT--;
+                    }
+                    j--;
+                }
+            if(S[i] != T[j]){
+                return false;
+            } else{
+                i--;
+                j--;
+            }
+        }
+        cout<<i<<", "<<j<<endl;
+        while(S[i]=='#'){
+            i -= 2;
+        }
+        while(T[j]=='#'){
+            j -= 2;
+        }
+        if(i>=0 || j>=0){
+            return false;
+        } else{
+            return true;
+        }
+    }
+};
