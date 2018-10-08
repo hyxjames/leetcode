@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int expressiveWords(string S, vector<string>& words) {
+        int result =  0;
+        vector<pair<char, int>> Sgroup;
+        char lastChar = S[0];
+        int length = 1;
+        for(int i=1;i<S.size();i++){
+            if(S[i] != lastChar){
+                pair<char, int> p(lastChar, length);
+                lastChar = S[i];
+                length = 1;
+                Sgroup.push_back(p);
+            } else{
+                length++;
+            }
+            if(i == S.size()-1){
+                pair<char, int> p(lastChar, length);
+                Sgroup.push_back(p);
+            }
+        }
+        /*for(int i=0;i<Sgroup.size();i++){
+            cout<<Sgroup[i].first<<", "<<Sgroup[i].second<<endl;
+        }*/
+        for(int i=0; i<words.size();i++){
+            string word = words[i];
+            vector<pair<char, int>> wordGroup;
+            char lastCharw = word[0];
+            int lengthw = 1;
+            //cout<<word<<endl;
+            for(int j=1;j<word.size();j++){
+                if(word[j] != lastCharw){
+                    //cout<<"put"<<endl;
+                    pair<char, int> p(lastCharw, lengthw);
+                    wordGroup.push_back(p);
+                    lastCharw = word[j];
+                    lengthw = 1;
+                } else{
+                    lengthw++;
+                }
+                if(j == word.size()-1){
+                    pair<char, int> p(lastCharw, lengthw);
+                    wordGroup.push_back(p);
+                    //cout<<"last"<<endl;
+                }
+            }
+             /*for(int j=0;j<Sgroup.size();j++){
+            cout<<wordGroup[j].first<<", "<<wordGroup[j].second<<endl;
+            }*/
+            //cout<<wordGroup.size()<<endl;
+            if(Sgroup.size() == wordGroup.size()){
+                bool isExt = true;
+                for(int j = 0;j<Sgroup.size();j++){
+                    if(Sgroup[i].first == wordGroup[i].first){
+                        if((Sgroup[i].second>=3 || Sgroup[i].second == wordGroup[i].second) && Sgroup[i]>=wordGroup[i]){
+                            ;
+                        } else{
+                            isExt = false;
+                            break;
+                        }
+                    } else{
+                        isExt = false;
+                        break;
+                    }
+                }
+                if(isExt)
+                    result++;
+            }
+        }
+        return result;
+    }
+};
