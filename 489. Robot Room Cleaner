@@ -1,0 +1,90 @@
+/**
+ * // This is the robot's control interface.
+ * // You should not implement it, or speculate about its implementation
+ * class Robot {
+ *   public:
+ *     // Returns true if the cell in front is open and robot moves into the cell.
+ *     // Returns false if the cell in front is blocked and robot stays in the current cell.
+ *     bool move();
+ *
+ *     // Robot will stay in the same cell after calling turnLeft/turnRight.
+ *     // Each turn will be 90 degrees.
+ *     void turnLeft();
+ *     void turnRight();
+ *
+ *     // Clean the current cell.
+ *     void clean();
+ * };
+ */
+class Solution {
+public:
+    pair<int, int> getNextPoint(int direction, int x, int y){
+        pair<int, int> result;
+        if(direction == 0){
+            result.first = x-1;
+            result.second = y;
+        } else if(direction == 1){
+            result.first = x;
+            result.second = y+1;
+        } else if(direction == 2){
+            result.first = x+1;
+            result.second = y;
+        } else{
+            result.first = x;
+            result.second = y-1;
+        }
+        return result;
+    }
+    
+    void dfs(int x, int y, Robot& robot, unordered_set<string>& visitedPoints, int& direction){
+        //cout<<direction<<": "<<x<<", "<<y<<endl;
+        robot.clean();
+        int initDirection = direction;
+        string pos = to_string(x)+","+to_string(y);
+        visitedPoints.insert(pos);
+        pair<int, int> nextPos = getNextPoint(direction, x, y);
+        if(visitedPoints.find(to_string(nextPos.first)+","+to_string(nextPos.second))==visitedPoints.end() && robot.move()){
+            dfs(nextPos.first, nextPos.second, robot, visitedPoints, direction);
+        }
+        while(direction != (initDirection+1)%4){
+            robot.turnRight();
+            direction = (direction+1)%4;
+        }
+        nextPos = getNextPoint(direction, x, y);
+        if(visitedPoints.find(to_string(nextPos.first)+","+to_string(nextPos.second))==visitedPoints.end() && robot.move()){
+            dfs(nextPos.first, nextPos.second, robot, visitedPoints, direction);
+        }
+        while(direction != (initDirection+2)%4){
+            robot.turnRight();
+            direction = (direction+1)%4;
+        }
+        nextPos = getNextPoint(direction, x, y);
+        if(visitedPoints.find(to_string(nextPos.first)+","+to_string(nextPos.second))==visitedPoints.end() && robot.move()){
+            dfs(nextPos.first, nextPos.second, robot, visitedPoints, direction);
+        }
+        while(direction != (initDirection+3)%4){
+            robot.turnRight();
+            direction = (direction+1)%4;
+        }
+        nextPos = getNextPoint(direction, x, y);
+        if(visitedPoints.find(to_string(nextPos.first)+","+to_string(nextPos.second))==visitedPoints.end() && robot.move()){
+            dfs(nextPos.first, nextPos.second, robot, visitedPoints, direction);
+        }
+        while(direction != (initDirection+2)%4){
+            direction = (direction+1)%4;
+            robot.turnRight();
+        }
+        robot.move();
+        return;
+    }
+    
+    void cleanRoom(Robot& robot) {
+        unordered_set<string> visitedPoints;
+        int x = 0;
+        int y = 0;
+        robot.turnLeft();
+        //cout<<robot.move()<<", "<<robot.move()<<endl;
+        int direction = 0;
+        dfs(x, y, robot, visitedPoints, direction);
+    }
+};
