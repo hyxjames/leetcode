@@ -1,0 +1,50 @@
+class Solution {
+public:
+    class UF{
+        public:
+        vector<int> id;
+        int count;
+        UF(int N){
+            for(int i=0;i<N;i++){
+                id.push_back(i);
+            }
+            //count = N;
+        }
+        
+        void myunion(int p, int q){
+            int pID = find(p);
+            int qID = find(q);
+            if(pID == qID){
+                return;
+            } else{
+                id[q] = pID;
+                //count--;
+                return;
+            }
+        }
+        
+        int find(int p){
+            while(id[p] != p) p = id[p];
+            return id[p];
+        }
+        
+        bool isConnected(int p, int q){
+            return find(p)==find(q);
+        }
+    };
+    
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> result;
+        UF uf(250);
+        for(int i=0;i<edges.size();i++){
+            if(uf.isConnected(edges[i][0], edges[i][1])){
+                result = edges[i];
+                break;
+            } else{
+                uf.myunion(edges[i][0], edges[i][1]);
+            }
+            //cout<<i<<", ";
+        }
+        return result;
+    }
+};
