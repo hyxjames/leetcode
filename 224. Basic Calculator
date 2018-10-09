@@ -1,0 +1,86 @@
+class Solution {
+public:
+    int calculate(string s) {
+        stack<char> operators;
+        //operators.push('#');
+        stack<string> nums;
+        string numStr = "";
+        //op.push_back('#');
+        for(int i=0;i<s.size();i++){
+            //cout<<s[i]<<endl;
+            if(s[i]>='0' && s[i]<='9'){
+                numStr.push_back(s[i]);
+            } else if(s[i]=='+' || s[i]=='-'){
+                if(numStr.size()>0){
+                    nums.push(numStr);
+                    numStr = "";
+                }
+                if(operators.size()>0 && operators.top() != '('){
+                    string opStr;
+                    opStr.push_back(operators.top());
+                    operators.pop();
+                    nums.push(opStr);
+                }
+                operators.push(s[i]);
+            } else if(s[i] == '('){
+                operators.push(s[i]);
+            } else if(s[i] == ')'){
+                if(numStr.size()>0){
+                    nums.push(numStr);
+                    numStr = "";
+                }
+                /*while(operators.size()>0){
+                    cout<<operators.top()<<", ";
+                    operators.pop();
+                }*/
+                while(operators.top() != '('){
+                    char op = operators.top();
+                    string opStr;
+                    opStr.push_back(op);
+                    //cout<<opStr<<endl;
+                    nums.push(opStr);
+                    operators.pop();
+                }
+                //cout<<operators.top()<<endl;
+                operators.pop();
+            }
+        }
+        if(numStr.size()>0){
+            nums.push(numStr);
+        }
+        //cout<<endl;
+        while(operators.size()>0){
+            char op = operators.top();
+            //cout<<op;
+            string s;
+            s.push_back(op);
+            nums.push(s);
+            operators.pop();
+        }
+        vector<string> vec;
+        while(nums.size() > 0){
+            //cout<<nums.top()<<", ";
+            vec.push_back(nums.top());
+            nums.pop();
+        }
+        reverse(vec.begin(), vec.end());
+        stack<int> st;
+        for(string str : vec){
+            //cout<<str<<", ";
+            if(str=="+" || str=="-"){
+                int num1 = st.top();
+                st.pop();
+                int num2 = st.top();
+                st.pop();
+                if(str=="+"){
+                    st.push(num2+num1);
+                } else{
+                    st.push(num2-num1);
+                }
+            } else{
+                st.push(atoi(str.c_str()));
+            }
+        }
+        return st.top();
+    }
+};
