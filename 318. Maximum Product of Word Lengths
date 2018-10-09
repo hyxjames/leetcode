@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        if(words.size()<2)
+            return 0;
+        vector<int> wordBits;
+        int max = 0;
+        for(int i=0;i<words.size();i++){
+            int wordBit = 0;
+            for(char c: words[i]){
+                wordBit |= 1<<(c-'a');
+            }
+            wordBits.push_back(wordBit);
+        }
+        for(int i=0;i<wordBits.size()-1;i++){
+            for(int j=i+1;j<wordBits.size();j++){
+                //cout<<i<<","<<j<<": "<<wordBits[i]<<", "<<wordBits[j]<<endl;
+                if((wordBits[i]&wordBits[j])==0 && words[i].size()*words[j].size()>max){
+                    max = words[i].size()*words[j].size();
+                }
+            }
+        }
+        return max;
+    }
+};
