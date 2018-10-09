@@ -1,0 +1,14 @@
+class Solution {
+public:
+    bool PredictTheWinner(vector<int>& nums) {
+        return helper(nums, 0, nums.size()-1)>=0;
+    }
+    
+    int helper(vector<int>& nums, int left, int right){
+        if(left == right){
+            return nums[left];
+        } else{
+            return max(nums[left]-helper(nums, left+1, right), nums[right]-helper(nums, left, right-1));
+        }
+    }
+};
