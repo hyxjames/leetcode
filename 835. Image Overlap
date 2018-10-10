@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& A, vector<vector<int>>& B) {
+        int length = A.size();
+        int result = 0;
+        for(int i=-length+1;i<length;i++){
+            for(int j=-length+1;j<length;j++){
+                int area1 = 0;
+                int area2 = 0;
+                for(int ii=0;ii<length;ii++){
+                    for(int jj=0;jj<length;jj++){
+                        if(i+ii>=0 && i+ii<length && j+jj>=0 && j+jj<length && A[ii][jj]==1 && B[i+ii][j+jj]==1)
+                            area1++;
+                        /*if(i+ii>=0 && i+ii<length && j+jj>=0 && j+jj<length && A[i+ii][j+jj]==1 && B[ii][jj]==1)
+                            area2++;*/
+                    }
+                }
+                result = max(result, area1);
+            }
+        }
+        return result;
+    }
+};
