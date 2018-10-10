@@ -1,0 +1,29 @@
+class Solution {
+public:
+    static bool pairComp(pair<int, double>p1, pair<int,double>p2){
+        return p1.first <= p2.first;
+    }
+    
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        if(position.size()==0){
+            return 0;
+        }
+        vector<pair<int, double>> cars;
+        for(int i=0;i<position.size();i++){
+            pair<int, double> p;
+            p.first = position[i];
+            p.second = (double)(target-position[i])/speed[i];
+            cars.push_back(p);
+        }
+        sort(cars.begin(), cars.end(), pairComp);
+        int ans = 1;
+        for(int i=cars.size()-1;i>0;i--){
+            if(cars[i].second < cars[i-1].second){
+                ans++;
+            } else{
+                cars[i-1].second = cars[i].second;
+            }
+        }
+        return ans;
+    }
+};
