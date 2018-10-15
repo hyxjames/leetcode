@@ -1,0 +1,68 @@
+class Solution {
+public:
+    int minCostII(vector<vector<int>>& costs) {
+        if(costs.size()==0)
+            return 0;
+        //vector<vector<pair<int, int>>> dp;
+        int min = INT_MAX;
+        int secondMin = INT_MAX;
+        int minPos = 0;
+        int secondMinPos = 0;
+        for(int i=0;i<costs[0].size();i++){
+            if(costs[0][i]<min){
+                secondMin = min;
+                secondMinPos = minPos;
+                min = costs[0][i];
+                minPos = i;
+            } else if(costs[0][i]<=secondMin){
+                secondMin = costs[0][i];
+                secondMinPos = i;
+            }
+        }
+        pair<int, int> p1(min, minPos);
+        pair<int, int> p2(secondMin, secondMinPos);
+        vector<pair<int,int>> vec;
+        vec.push_back(p1);
+        vec.push_back(p2);
+        //dp.push_back(vec);
+        //cout<<min<<", "<<secondMin<<", "<<minPos<<endl;
+        for(int i=1;i<costs.size();i++){
+            min = INT_MAX;
+            int secondMin = INT_MAX;
+            int minPos = 0;
+            int secondMinPos = 0;
+            for(int j=0;j<costs[i].size();j++){
+                //cout<<costs[i][j]<<endl;
+                if(j != vec[0].second){
+                   // cout<<j<<": "<<costs[i][j]+vec[0].first<<", "<<min<<endl;
+                    if((costs[i][j]+vec[0].first) < min){
+                        secondMin = min;
+                        secondMinPos = minPos;
+                        min = costs[i][j]+vec[0].first;
+                        minPos = j;
+ 
+                    } else if((costs[i][j]+vec[0].first)<secondMin){
+                        secondMin = costs[i][j]+vec[0].first;
+                        secondMinPos = j;
+                    }
+                } else{
+                    if((costs[i][j]+vec[1].first) < min){
+                        secondMin = min;
+                        secondMinPos = minPos;
+                        min = costs[i][j]+vec[1].first;
+                        minPos = j;
+                    } else if((costs[i][j]+vec[1].first)<secondMin){
+                        secondMin = costs[i][j]+vec[1].first;
+                        secondMinPos = j;
+                    }
+                }
+            }
+            //cout<<min<<", "<<secondMin<<endl;
+            vec[0].first = min;
+            vec[0].second = minPos;
+            vec[1].first = secondMin;
+            vec[1].second = secondMinPos;
+        }
+        return vec[0].first;
+    }
+};
