@@ -1,0 +1,65 @@
+class Node{
+    public:
+    char val;
+    unordered_map<char, Node*> map;
+    bool isEnd = false;
+};
+
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    Node* head;
+    Trie() {
+        head = new Node();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Node* node = head;
+        for(int i=0;i<word.size();i++){
+            if(node->map.find(word[i]) == node->map.end()){
+                Node* n = new Node();
+                n->val = word[i];
+                node->map[word[i]] = n;
+                node = n;
+            } else{
+                node = node->map[word[i]];
+            }
+        }
+        node->isEnd = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        Node* node = head;
+        for(int i=0;i<word.size();i++){
+            if(node->map.find(word[i]) == node->map.end()){
+                return false;
+            } else{
+                node = node->map[word[i]];
+            }
+        }
+        return node->isEnd;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        Node* node = head;
+        for(int i=0;i<prefix.size();i++){
+            if(node->map.find(prefix[i]) == node->map.end()){
+                return false;
+            } else{
+                node = node->map[prefix[i]];
+            }
+        }
+        return true;
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * bool param_2 = obj.search(word);
+ * bool param_3 = obj.startsWith(prefix);
+ */
