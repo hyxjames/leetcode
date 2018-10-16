@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int mySqrt(int x) {
+        if(x<2){
+            return x;
+        }
+        return helper(x, 1, x);
+    }
+    
+    int helper(int x, long left, long right){
+        int result;
+        if(left+1 == right){
+            result = left;
+        } else{
+            long mid = (left+right)/2;
+            if(mid*mid <= x){
+                result = helper(x, mid, right);
+            } else{
+                result = helper(x, left, mid);
+            }
+        }
+        return result;
+    }
+};
