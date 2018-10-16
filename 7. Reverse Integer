@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int reverse(int x) {
+        int res = 0;
+        bool isNeg = (x<0);
+        while(x != 0){
+            //cout<<x<<", "<<res<<endl;
+            if(res > INT_MAX/10 || res < INT_MIN/10)
+                return 0;
+            res = res*10+(x%10);
+            x /= 10;
+        }
+        //if(isNeg)
+        //    res *= -1;
+        return res;
+    }
+};
