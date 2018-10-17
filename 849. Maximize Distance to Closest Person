@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maxDistToClosest(vector<int>& seats) {
+        vector<int> poses;
+        for(int i=0;i<seats.size();i++){
+            if(seats[i] == 1){
+                poses.push_back(i);
+            }
+        }
+        int result = poses[0];
+        for(int i=1;i<poses.size();i++){
+            result = max(result, (poses[i]-poses[i-1])/2);
+        }
+        result = max(result, (int)(seats.size()-1-poses[poses.size()-1]));
+        return result;
+    }
+};
