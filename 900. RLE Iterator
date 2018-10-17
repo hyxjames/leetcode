@@ -1,0 +1,30 @@
+class RLEIterator {
+public:
+    vector<int> vec;
+    int i=0;
+    RLEIterator(vector<int> A) {
+        vec = A;
+    }
+    
+    int next(int n) {
+        //int i=0;
+        int result = -1;
+        while(n > 0 && i<vec.size()){
+            if(vec[i] >= n){
+                vec[i] -= n;
+                result = vec[i+1];
+                break;
+            } else{
+                n -= vec[i];
+                i += 2;
+            }
+        }
+        return result;
+    }
+};
+
+/**
+ * Your RLEIterator object will be instantiated and called as such:
+ * RLEIterator obj = new RLEIterator(A);
+ * int param_1 = obj.next(n);
+ */
