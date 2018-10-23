@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n<=0) return false;
+        bitset<32> bs(n);
+        int cnt = 0;
+        for(int i=0;i<32;i++){
+            if(bs[i])
+                cnt++;
+            if(cnt>1)
+                break;
+        }
+        return cnt==1;
+    }
+};
