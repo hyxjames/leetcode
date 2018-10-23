@@ -1,0 +1,38 @@
+class ZigzagIterator {
+public:
+    vector<int> v1;
+    vector<int> v2;
+    int left=0;
+    int right=0;
+    
+    ZigzagIterator(vector<int>& v1, vector<int>& v2) {
+        this->v1 = v1;
+        this->v2 = v2;
+    }
+
+    int next() {
+        if(left<v1.size() && right<v2.size()){
+            if(left==right){
+                return v1[left++];
+            } else{
+                return v2[right++];
+            }
+        } else if(left<v1.size()){
+            return v1[left++];
+        } else if(right<v2.size()){
+            return v2[right++];
+        } else{
+            return false;
+        }
+    }
+
+    bool hasNext() {
+        return left<v1.size()||right<v2.size();
+    }
+};
+
+/**
+ * Your ZigzagIterator object will be instantiated and called as such:
+ * ZigzagIterator i(v1, v2);
+ * while (i.hasNext()) cout << i.next();
+ */
