@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        if(matrix.size()==0)
+            return 0;
+        vector<vector<int>> dp;
+        for(int i=0;i<=matrix.size();i++){
+            vector<int> vec;
+            for(int j=0;j<matrix[0].size();j++){
+                vec.push_back(0);
+            }
+            dp.push_back(vec);
+        }
+        int res = 0;
+        for(int i=0;i<matrix.size();i++){
+            for(int j=0;j<matrix[0].size();j++){
+                if(matrix[i][j]=='1'){
+                    dp[i+1][j+1] = min(min(dp[i+1][j], dp[i][j+1]), dp[i][j]+1)+1;
+                    res = max(res, dp[i+1][j+1]);
+                } else{
+                    dp[i+1][j+1] = 0;
+                }
+            }
+        }
+        return res*res;
+    }
+};
