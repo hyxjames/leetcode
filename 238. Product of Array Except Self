@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> l2r(nums.size(),1);
+        vector<int> r2l(nums.size(),1);
+        for(int i=1;i<nums.size();i++){
+            l2r[i] = l2r[i-1]*nums[i-1];
+            r2l[nums.size()-i-1] = r2l[nums.size()-i]*nums[nums.size()-i];
+        }
+        vector<int> result;
+        for(int i=0;i<nums.size();i++){
+            result.push_back(l2r[i]*r2l[i]);
+        }
+        return result;
+    }
+};
