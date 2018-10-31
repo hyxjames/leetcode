@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int romanToInt(string s) {
+        //set map from Roman to int
+        /*unordered_map<string, int> map;
+        map["I"] = 1;
+        map["V"] = 5;
+        map["X"] = 10;
+        map["L"] = 50;
+        map["C"] = 100;
+        map["D"] = 500;
+        map["M"] = 1000;
+        map["IV"] = 4;
+        map["IX"] = 9;
+        map["XL"] = 40;
+        map["XC"] = 90;
+        map["CD"] = 400;
+        map["CM"] = 900;*/
+        int i = 0;
+        int result = 0;
+        while(i < s.size()){
+            if(s[i] == 'I'){
+                i++;
+                if(i<s.size() && s[i]=='V'){
+                    result += 4;
+                    i++;
+                } else if(i<s.size() && s[i]=='X'){
+                    result += 9;
+                    i++;
+                } else{
+                    result += 1;
+                }
+            } else if(s[i] == 'V'){
+                result += 5;
+                i++;
+            } else if(s[i] == 'X'){
+                i++;
+                if(i<s.size() && s[i]=='L'){
+                    result += 40;
+                    i++;
+                } else if(i<s.size() && s[i]=='C'){
+                    result += 90;
+                    i++;
+                } else{
+                    result += 10;
+                }
+            } else if(s[i] == 'L'){
+                result += 50;
+                i++;
+            } else if(s[i] == 'C'){
+                i++;
+                if(i<s.size() && s[i]=='D'){
+                    result += 400;
+                    i++;
+                } else if(i<s.size() && s[i]=='M'){
+                    result += 900;
+                    i++;
+                } else{
+                    result += 100;
+                }
+            } else if(s[i] == 'D'){
+                result += 500;
+                i++;
+            } else if(s[i] == 'M'){
+                result += 1000;
+                i++;
+            }
+        }
+        return result;
+    }
+};
