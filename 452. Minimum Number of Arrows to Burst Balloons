@@ -1,0 +1,30 @@
+class Solution {
+public:
+    static bool comp(pair<int,int> p1, pair<int,int> p2){
+        if(p1.first != p2.first){
+            return p1.first<p2.first;
+        } else{
+            return p1.second<p2.second;
+        }
+    }
+    
+    int findMinArrowShots(vector<pair<int, int>>& points) {
+        if(points.size()==0)
+            return 0;
+        sort(points.begin(), points.end(), comp);
+        int res = 1;
+        int end = points[0].second;
+        int start = points[0].first;
+        for(int i=1;i<points.size();i++){
+            if((points[i].first>=start&&points[i].first<=end) || (points[i].second>=start&&points[i].second<=end)){
+                start = max(start, points[i].first);
+                end = min(end, points[i].second);
+            } else{
+                res++;
+                end = points[i].second;
+                start = points[i].first;
+            }
+        }
+        return res;
+    }
+};
