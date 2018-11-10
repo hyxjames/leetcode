@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> dp(num+1,0);
+        dp[1] = 1;
+        unordered_set<int> set;
+        set.insert(1);
+        int base = 1;
+        for(int i=2;i<=num;i++){
+            if(i%2==0 && set.find(i/2)!=set.end()){
+                dp[i] = 1;
+                set.insert(i);
+                base = i;
+            } else{
+                dp[i] = dp[base]+dp[i-base];
+            }
+        }
+        return dp;
+    }
+};
