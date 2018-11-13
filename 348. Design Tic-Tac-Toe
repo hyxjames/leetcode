@@ -1,0 +1,63 @@
+class TicTacToe {
+public:
+    /** Initialize your data structure here. */
+    vector<int> player1Row;
+    vector<int> player1Col;
+    int player1Dia;
+    int player1AntiDia;
+    vector<int> player2Row;
+    vector<int> player2Col;
+    int player2Dia;
+    int player2AntiDia;
+    int n;
+    
+    TicTacToe(int n) {
+        this->n = n;
+        player1Row = vector<int>(n,0);
+        player1Col = vector<int>(n,0);
+        player1Dia = 0;
+        player1AntiDia = 0;
+        player2Row = vector<int>(n,0);
+        player2Col = vector<int>(n,0);
+        player2Dia = 0;
+        player2AntiDia = 0;
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    int move(int row, int col, int player) {
+        int res = 0;
+        if(player==1){
+            player1Row[row]++;
+            player1Col[col]++;
+            if(row==col){
+                player1Dia++;
+            }
+            if(col+row == n-1){
+                player1AntiDia++;
+            }
+            //cout<<player1Row[row]<<", "<<player1Col[col]<<", "<<player1Dia<<", "<<player1AntiDia<<endl;
+            if(player1Row[row]==n || player1Col[col]==n || player1Dia==n || player1AntiDia==n)
+                res = 1;
+        } else{
+            player2Row[row]++;
+           // cout<<player2Row[row]<<endl;
+            player2Col[col]++;
+            if(row==col){
+                player2Dia++;
+            }
+            if(col+row == n-1){
+                player2AntiDia++;
+            }
+            if(player2Row[row]==n || player2Col[col]==n || player2Dia==n || player2AntiDia==n)
+                res = 2;
+        }
+        return res;
+    }
+};
