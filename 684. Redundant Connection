@@ -1,50 +1,68 @@
 class Solution {
 public:
-    class UF{
+    class UnionFind{
         public:
-        vector<int> id;
-        int count;
-        UF(int N){
-            for(int i=0;i<N;i++){
-                id.push_back(i);
+        vector<int> vec;
+        int clusters = 0;
+        
+        UnionFind(int N){
+            vec.push_back(-1);
+            for(int i=1;i<=N;i++){
+                vec.push_back(i);
             }
-            //count = N;
+            clusters = N;
         }
         
-        void myunion(int p, int q){
-            int pID = find(p);
-            int qID = find(q);
-            if(pID == qID){
-                return;
-            } else{
-                id[q] = pID;
-                //count--;
-                return;
+        bool find(int n1, int n2){
+            int parent1, parent2;
+            while(vec[n1] != n1){
+                n1 = vec[n1];
             }
+            parent1 = n1;
+            while(vec[n2] != n2){
+                n2 = vec[n2];
+            }
+            parent2 = n2;
+            return parent1 == parent2;
         }
         
-        int find(int p){
-            while(id[p] != p) p = id[p];
-            return id[p];
-        }
-        
-        bool isConnected(int p, int q){
-            return find(p)==find(q);
+        void un(int n1, int n2){
+            int parent1, parent2;
+            while(vec[n1] != n1){
+                n1 = vec[n1];
+            }
+            parent1 = n1;
+            while(vec[n2] != n2){
+                n2 = vec[n2];
+            }
+            parent2 = n2;
+            if(parent1 != parent2){
+                vec[parent1] = parent2;
+                clusters--;
+            }
+            /*cout<<"===================="<<endl;
+            cout<<n1<<", "<<n2<<endl;
+        for(int i=0;i<vec.size();i++){
+            cout<<vec[i]<<endl;
+        }*/
         }
     };
     
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
-        vector<int> result;
-        UF uf(250);
+        unordered_set<int> nodes;
         for(int i=0;i<edges.size();i++){
-            if(uf.isConnected(edges[i][0], edges[i][1])){
-                result = edges[i];
-                break;
-            } else{
-                uf.myunion(edges[i][0], edges[i][1]);
-            }
-            //cout<<i<<", ";
+            nodes.insert(edges[i][0]);
+            nodes.insert(edges[i][1]);
         }
-        return result;
+        int N = nodes.size();
+        UnionFind uf(N);
+        for(int i=0;i<edges.size();i++){
+            if(uf.find(edges[i][0], edges[i][1])){
+                return edges[i];
+            } else{
+                uf.un(edges[i][0], edges[i][1]);
+            }
+        }
+        return vector<int>(0,2);
     }
 };
