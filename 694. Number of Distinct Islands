@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        vector<vector<pair<int,int>>> islands;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]==1){
+                    vector<pair<int,int>> island;
+                    dfs(grid, make_pair(i,j), island);
+                    islands.push_back(island);
+                }
+            }
+        }
+        for(int i=0;i<islands.size();i++){
+            for(int j=i+1;j<islands.size();j++){
+                if(islands[i].size() != islands[j].size()) continue;
+                int diffy = islands[i][0].first-islands[j][0].first;
+                int diffx = islands[i][0].second - islands[j][0].second;
+                bool isSame = true;
+                for(int k=0;k<islands[i].size();k++){
+                    if(islands[i][k].first != islands[j][k].first+diffy || islands[i][k].second != islands[j][k].second+diffx){
+                        isSame = false;
+                        break;
+                    }
+                }
+                if(isSame){
+                    islands.erase(islands.begin()+j);
+                    j--;
+                }
+            }
+        }
+        return islands.size();
+    }
+    
+    void dfs(vector<vector<int>>& grid, const pair<int,int>& curPos, vector<pair<int,int>>& island){
+        int y = curPos.first;
+        int x = curPos.second;
+        grid[y][x] = 0;
+        island.push_back(curPos);
+        if(x>0 && grid[y][x-1]==1){
+            dfs(grid, make_pair(y,x-1), island);
+        }
+        if(x<grid[0].size()-1 && grid[y][x+1]==1){
+            dfs(grid, make_pair(y,x+1), island);
+        }
+        if(y<grid.size()-1 && grid[y+1][x]==1){
+            dfs(grid, make_pair(y+1,x), island);
+        }
+        if(y>0 && grid[y-1][x]==1){
+            dfs(grid, make_pair(y-1,x), island);
+        }
+    }
+};
