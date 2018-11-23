@@ -1,0 +1,48 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<int> nums;
+        stack<char> str;
+        string result;
+        for(int i=0;i<s.size();i++){
+            if(isdigit(s[i])){
+                int num = 0;
+                while(isdigit(s[i]) && i<s.size()){
+                    num = 10*num+s[i]-'0';
+                    i++;
+                }
+                i--;
+                nums.push(num);
+            } else if(isalpha(s[i])){
+                str.push(s[i]);
+            } else if(s[i] == '['){
+                str.push(s[i]);
+            } else if(s[i] == ']'){
+                string st;
+                while(str.top() != '['){
+                    st.push_back(str.top());
+                    str.pop();
+                }
+                str.pop();
+                reverse(st.begin(), st.end());
+                int n = nums.top();
+                nums.pop();
+                for(int i=0;i<n;i++){
+                    result.append(st);
+                }
+                for(int i=0;i<result.size();i++){
+                    str.push(result[i]);
+                }
+                result.clear();
+            } else{
+                return "error";
+            }
+        }
+        while(str.size()>0){
+            result.push_back(str.top());
+            str.pop();
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
