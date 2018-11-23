@@ -1,0 +1,44 @@
+class Solution {
+public:
+    bool canIWin(int maxChoosableInteger, int desiredTotal) {
+        vector<int> choices;
+        unordered_map<string, bool> map;
+        int sum = 0;
+        for(int i=1;i<=maxChoosableInteger;i++){
+            choices.push_back(i);
+            sum += i;
+        }
+        if(sum < desiredTotal) return false;
+        return helper(choices, desiredTotal, map);
+    }
+    
+    bool helper(vector<int> choices, int leftTotal, unordered_map<string, bool>& map){
+        if(choices.size()==1) return choices[0]>=leftTotal;
+        if(choices[choices.size()-1] >= leftTotal){
+            return true;
+        } else{
+            string key = vec2Str(choices);
+            if(map.find(key) != map.end()){
+                return map[key];
+            } else {
+                bool res = false;
+                for(int i=0;i<choices.size();i++){
+                    vector<int> nextChoices = choices;
+                    nextChoices.erase(nextChoices.begin()+i);
+                    res = res || (!helper(nextChoices, leftTotal-choices[i], map));
+                    if(res) break;
+                }
+                map[key] = res;
+                return res;
+            }
+        }
+    }
+                     
+    string vec2Str(vector<int> vec){
+        string str = "";
+        for(int i=0;i<vec.size();i++){
+            str.push_back(vec[i]+'0');
+        }
+        return str;
+    }
+};
