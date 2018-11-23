@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<string> findStrobogrammatic(int n) {
+        unordered_map<char, char> map;
+        map['0'] = '0';
+        map['1'] = '1';
+        map['6'] = '9';
+        map['8'] = '8';
+        map['9'] = '6';
+        unordered_map<char, char> singleMap;
+        singleMap['0'] = '0';
+        singleMap['1'] = '1';
+        singleMap['8'] = '8';
+        vector<string> result;
+        result.push_back("");
+        for(int i=0;i<n/2;i++){
+            vector<string> newResult;
+            for(int j=0;j<result.size();j++){
+                for(auto it=map.begin();it!=map.end();it++){
+                    if(it->first!='0' || i!=0){
+                        string str = result[j];
+                        str.insert(str.begin()+i, it->first);
+                        str.insert(str.begin()+i+1, it->second);
+                        newResult.push_back(str);
+                    }
+                }
+            }
+            result = newResult;
+        }
+        if(n%2 != 0){
+            int i = n/2;
+            vector<string> newResult;
+            for(int j=0;j<result.size();j++){
+                for(auto it=singleMap.begin();it!=singleMap.end();it++){
+                    if(it->first!=0 || i!=0){
+                        string str = result[j];
+                        str.insert(str.begin()+i, it->first);
+                        newResult.push_back(str);
+                    }
+                }
+            }
+            result = newResult;
+        }
+        return result;
+    }
+};
