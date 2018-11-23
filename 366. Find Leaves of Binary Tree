@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> findLeaves(TreeNode* root) {
+        vector<vector<int>> result;
+        if(root==NULL) return result;
+        int depth = 0;
+        dfs(root, result, depth);
+        return result;
+    }
+    
+    void dfs(TreeNode* node, vector<vector<int>>& result, int& depth){
+        if(node->left==NULL && node->right==NULL){
+            depth = 0;
+            updateResult(result, depth, node->val);
+        } else if(node->right==NULL){
+            dfs(node->left, result, depth);
+            depth++;
+            updateResult(result, depth, node->val);
+        } else if(node->left==NULL){
+            dfs(node->right, result, depth);
+            depth++;
+            updateResult(result, depth, node->val);
+        } else{
+            int ld, rd;
+            dfs(node->left, result, ld);
+            dfs(node->right, result, rd);
+            depth = max(ld, rd);
+            depth++;
+            updateResult(result, depth, node->val);
+        }
+    }
+    
+    void updateResult(vector<vector<int>>& result, int depth, int val){
+        if(result.size() >= depth+1){
+            result[depth].push_back(val);
+        } else{
+            vector<int> vec;
+            vec.push_back(val);
+            result.push_back(vec);
+        }
+    }
+};
