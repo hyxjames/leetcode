@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        unordered_map<string, int> memo;
+        return dfs(price, special, needs, memo);
+    }
+    
+    int dfs(vector<int>& price, vector<vector<int>>& special, vector<int>& needs, unordered_map<string, int>& memo){
+        string key = vec2Str(needs);
+        if(memo.find(key) != memo.end()) return memo[key];
+        bool isTerminate = true;
+        for(int i=0;i<needs.size();i++){
+            if(needs[i] > 0){
+                isTerminate = false;
+                break;
+            }
+        }
+        if(isTerminate) {
+            memo[key] = 0;
+            return 0;
+        }
+        int result = INT_MAX;
+        for(int i=0;i<price.size();i++){
+            vector<int> newNeeds = needs;
+            if(needs[i]>0){
+                newNeeds[i]--;
+                result = min(result, price[i]+dfs(price, special, newNeeds, memo));
+            }
+        }
+        for(int i=0;i<special.size();i++){
+            bool isValid = true;
+            vector<int> newNeeds = needs;
+            for(int j=0;j<special[i].size()-1;j++){
+                newNeeds[j] -= special[i][j];
+                if(newNeeds[j] < 0){
+                    isValid = false;
+                    break;
+                }
+            }
+            if(isValid){
+                if(special[i][special[i].size()-1] < result)
+                    result = min(result, special[i][special[i].size()-1]+dfs(price, special, newNeeds, memo));
+            }
+        }
+        memo[key] = result;
+        return result;
+    }
+    
+    string vec2Str(vector<int>& vec){
+        string str = "";
+        for(int i=0;i<vec.size();i++){
+            str.append(to_string(vec[i]));
+            str.push_back(',');
+        }
+        return str;
+    }
+};
