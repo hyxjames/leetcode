@@ -1,0 +1,48 @@
+class Solution {
+public:
+    class UnionFind{
+        public:
+        vector<int> nodes;
+        int clusterNum;
+        
+        UnionFind(int N){
+            clusterNum = N;
+            for(int i=0;i<N;i++){
+                nodes.push_back(i);
+            }
+        }
+        
+        bool find(int n1, int n2){
+            while(nodes[n1] != n1){
+                n1 = nodes[n1];
+            }
+            while(nodes[n2] != n2){
+                n2 = nodes[n2];
+            }
+            return n1==n2;
+            
+        }
+        
+        void un(int n1, int n2){
+            while(nodes[n1] != n1){
+                n1 = nodes[n1];
+            }
+            while(nodes[n2] != n2){
+                n2 = nodes[n2];
+            }
+            if(n1 != n2){
+                nodes[n1] = n2;
+                clusterNum--;
+            }
+            
+        }
+    };
+    
+    int countComponents(int n, vector<pair<int, int>>& edges) {
+        UnionFind uf(n);
+        for(int i=0;i<edges.size();i++){
+            uf.un(edges[i].first, edges[i].second);
+        }
+        return uf.clusterNum;
+    }
+};
