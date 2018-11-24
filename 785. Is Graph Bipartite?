@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        unordered_set<int> visited;
+        unordered_map<int,bool> colors;
+        int firstIndex = 0;
+        for(int i=0;i<graph.size();i++){
+            if(graph[i].size()>0){
+                firstIndex = i;
+                break;
+            }
+        }
+        colors[firstIndex] = true;
+        return dfs(firstIndex, graph, colors, visited);
+    }
+    
+    bool dfs(int curNode, vector<vector<int>>& graph, unordered_map<int,bool>& colors, unordered_set<int>& visited){
+        visited.insert(curNode);
+        bool color = colors[curNode];
+        for(int i=0;i<graph[curNode].size();i++){
+            if(colors.find(graph[curNode][i]) == colors.end()){
+                colors[graph[curNode][i]] = !color;
+            } else{
+                if(colors[graph[curNode][i]] == color) return false;
+            }
+        }
+        bool result = true;
+        for(int i=0;i<graph[curNode].size();i++){
+            if(visited.find(graph[curNode][i]) == visited.end()){
+                result = result && dfs(graph[curNode][i], graph, colors, visited);
+            }
+        }
+        return result;
+    }
+};
