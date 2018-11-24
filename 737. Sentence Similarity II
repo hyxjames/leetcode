@@ -1,0 +1,55 @@
+class Solution {
+public:
+    class UnionFind{
+        public:
+        vector<int> nodes;
+        
+        UnionFind(int N){
+            for(int i=0;i<N;i++){
+                nodes.push_back(i);
+            }
+        }
+        
+        int findParent(int n){
+            while(nodes[n] != n) n = nodes[n];
+            return n;
+        }
+        
+        bool find(int n1, int n2){
+            int p1 = findParent(n1);
+            int p2 = findParent(n2);
+            return p1==p2;
+        }
+        
+        void un(int n1, int n2){
+            int p1 = findParent(n1);
+            int p2 = findParent(n2);
+            nodes[p1] = p2;
+        }
+    };
+    
+    bool areSentencesSimilarTwo(vector<string>& words1, vector<string>& words2, vector<pair<string, string>> pairs) {
+        unordered_map<string, int> keyMap;
+        for(int i=0;i<pairs.size();i++){
+            if(keyMap.find(pairs[i].first) == keyMap.end()){
+                int keySize = keyMap.size();
+                keyMap[pairs[i].first] = keySize;
+            }
+            if(keyMap.find(pairs[i].second) == keyMap.end()){
+                int keySize = keyMap.size();
+                keyMap[pairs[i].second] = keySize;
+            }
+        }
+        UnionFind uf(keyMap.size());
+        for(int i=0;i<pairs.size();i++){
+            uf.un(keyMap[pairs[i].first], keyMap[pairs[i].second]);
+        }
+        if(words1.size() != words2.size()) return false;
+        for(int i=0;i<words1.size();i++){
+            if(words1[i] == words2[i]) continue;
+            if(keyMap.find(words1[i])==keyMap.end() || keyMap.find(words2[i])==keyMap.end()) return false;
+            if(!uf.find(keyMap[words1[i]], keyMap[words2[i]])) return false;
+        }
+        return true;
+    }
+};
