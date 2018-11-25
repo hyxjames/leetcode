@@ -1,0 +1,47 @@
+class Solution {
+public:
+    class Node{
+        public:
+        vector<int> children;
+        int in;
+        int val;
+        
+        Node(int val){
+            this->val = val;
+            in = 0;
+        }
+    };
+    
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        if(prerequisites.size()==0 || numCourses<2) return true;
+        vector<Node*> nodes;
+        for(int i=0;i<numCourses;i++){
+            Node* n = new Node(i);
+            nodes.push_back(n);
+        }
+        for(int i=0;i<prerequisites.size();i++){
+            pair<int,int> p = prerequisites[i];
+            nodes[p.first]->children.push_back(p.second);
+            nodes[p.second]->in++;
+        }
+        queue<int> q;
+        for(int i=0;i<nodes.size();i++){
+            if(nodes[i]->in==0){
+                q.push(i);
+            }
+        }
+        unordered_set<int> visited;
+        while(!q.empty()){
+            Node* node = nodes[q.front()];
+            q.pop();
+            visited.insert(node->val);
+            for(int i=0;i<node->children.size();i++){
+                nodes[node->children[i]]->in--;
+                if(nodes[node->children[i]]->in == 0){
+                    q.push(nodes[node->children[i]]->val);
+                }
+            }
+        }
+        return visited.size()==numCourses;
+    }
+};
