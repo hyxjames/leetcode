@@ -1,0 +1,46 @@
+class Solution {
+public:
+    class Node{
+        public:
+        int in = 0;
+        int val;
+        vector<int> children;
+        
+        Node(int val){
+            this->val = val;
+        }
+    };
+    
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<int> result;
+        vector<Node*> nodes;
+        for(int i=0;i<numCourses;i++){
+            Node* n = new Node(i);
+            nodes.push_back(n);
+        }
+        for(int i=0;i<prerequisites.size();i++){
+            pair<int,int> p = prerequisites[i];
+            nodes[p.second]->children.push_back(p.first);
+            nodes[p.first]->in++;
+        }
+        queue<int> q;
+        for(int i=0;i<nodes.size();i++){
+            if(nodes[i]->in==0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            int n = q.front();
+            result.push_back(n);
+            q.pop();
+            for(int i=0;i<nodes[n]->children.size();i++){
+                nodes[nodes[n]->children[i]]->in--;
+                if(nodes[nodes[n]->children[i]]->in==0){
+                    q.push(nodes[n]->children[i]);
+                }
+            }
+        }
+        if(result.size() != numCourses) result.clear();
+        return result;
+    }
+};
