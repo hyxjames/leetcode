@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.size()==0) return 0;
+        vector<vector<int>> result(matrix.size(), vector<int>(matrix[0].size(), -1));
+        int res = 1;
+        for(int i=0;i<matrix.size();i++){
+            for(int j=0;j<matrix[0].size();j++){
+                res = max(res, dfs(result,matrix,make_pair(i,j)));
+            }
+        }
+        return res;
+    }
+    
+    int dfs(vector<vector<int>>& result, vector<vector<int>>& matrix, pair<int,int> pos){
+        int y = pos.first;
+        int x = pos.second;
+        if(result[y][x]>0) return result[y][x];
+        int res = 1;
+        if(x>0 && matrix[y][x]<matrix[y][x-1]){
+            res = max(res, 1+dfs(result,matrix,make_pair(y,x-1)));
+        }
+        if(y>0 && matrix[y][x]<matrix[y-1][x]){
+            res = max(res, 1+dfs(result,matrix,make_pair(y-1,x)));
+        }
+        if(x<matrix[0].size()-1 && matrix[y][x]<matrix[y][x+1]){
+            res = max(res, 1+dfs(result,matrix,make_pair(y,x+1)));
+        }
+        if(y<matrix.size()-1 && matrix[y][x]<matrix[y+1][x]){
+            res = max(res, 1+dfs(result,matrix,make_pair(y+1,x)));
+        }
+        result[y][x] = res;
+        return res;
+    }
+};
