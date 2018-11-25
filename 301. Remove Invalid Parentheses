@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        queue<string> q;
+        q.push(s);
+        int curDel = 0;
+        int minDel = INT_MAX;
+        set<string> visited;
+        vector<string> result;
+        while(!q.empty() && curDel<=minDel){
+            string str = q.front();
+            q.pop();
+            if(visited.find(str) != visited.end()) continue;
+            visited.insert(str);
+            curDel = s.size()-str.size();
+            if(isValid(str)){
+                minDel = curDel;
+                result.push_back(str);
+            }
+            if(curDel<minDel){
+                for(int i=0;i<str.size();i++){
+                    if(str[i]=='(' || str[i]==')'){
+                        string newStr = str;
+                        newStr.erase(newStr.begin()+i);
+                        q.push(newStr);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    bool isValid(string s){
+        stack<char> st;
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='('){
+                st.push(s[i]);
+            } else if(s[i]==')'){
+                if(!st.empty()){
+                    st.pop();
+                } else{
+                    return false;
+                }
+            }
+        }
+        return st.empty();
+    }
+};
