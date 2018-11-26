@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> dead;
+        for(int i=0;i<deadends.size();i++){
+            dead.insert(deadends[i]);
+        }
+        if(dead.find("0000")!=dead.end()) return -1;
+        queue<string> q;
+        q.push("0000");
+        int size = 1;
+        int level = 0;
+        int hasAns = false;
+        dead.insert("0000");
+        while(!q.empty()){
+            string str = q.front();
+            q.pop();
+            size--;
+            if(str == target){
+                hasAns = true;
+                break;
+            }
+            for(int i=0;i<4;i++){
+                string newStr1 = str;
+                newStr1[i] = (newStr1[i]-'0'+1)%10+'0';
+                string newStr2 = str;
+                newStr2[i] = (newStr2[i]-'0'-1)%10+'0';
+                newStr2[i] = newStr2[i]<'0'?'9':newStr2[i];
+                //cout<<newStr2<<endl;
+                if(dead.find(newStr1) == dead.end()){
+                    q.push(newStr1);
+                    dead.insert(newStr1);
+                }
+                if(dead.find(newStr2)==dead.end()){
+                    q.push(newStr2);
+                    dead.insert(newStr2);
+                }
+            }
+            if(size==0){
+                level++;
+                size = q.size();
+            }
+        }
+        return hasAns?level:-1;
+    }
+};
