@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        unordered_map<int, vector<pair<int,int>>> graph;
+        for(int i=0;i<flights.size();i++){
+            if(graph.find(flights[i][0]) == graph.end()){
+                vector<pair<int,int>> vec;
+                graph[flights[i][0]] = vec;
+            }
+            graph[flights[i][0]].push_back(make_pair(flights[i][1], flights[i][2]));
+        }
+        queue<int> q;
+        int level = 0;
+        q.push(src);
+        int size = 1;
+        unordered_map<int, int> memo; //dst, value
+        memo[src] = 0;
+        unordered_map<int,int> helper;
+        while(!q.empty() && level<=K){
+            int st = q.front();
+            q.pop();
+            size--;
+            vector<pair<int,int>> vec = graph[st];
+            for(int i=0;i<vec.size();i++){
+                int ed = vec[i].first;
+                int val = vec[i].second;
+                //cout<<st<<", "<<ed<<", "<<val<<", "<<memo[st]<<endl;
+                if(helper.find(ed) == helper.end()){
+                    helper[ed] = memo[st]+val;
+                    q.push(ed);
+                } else{
+                    if(memo[st]+val < helper[ed]) q.push(ed);
+                    helper[ed] = min(helper[ed], memo[st]+val);
+                }
+            }
+            if(size==0){
+                level++;
+                size = q.size();
+                memo = helper;
+            }
+        }
+        if(memo.find(dst)==memo.end()){
+            return -1;
+        } else{
+            return memo[dst];
+        }
+    }
+};
