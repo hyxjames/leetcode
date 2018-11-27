@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int countArrangement(int N) {
+        vector<int> nums;
+        for(int i=0;i<=N;i++){
+            nums.push_back(0);
+        }
+        return dfs(nums, 1);
+    }
+    
+    int dfs(vector<int>& nums, int pos){
+        int res = 0;
+        //cout<<pos<<endl;
+        if(pos>=nums.size()) return 1;
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]==0 && (i%pos==0 || pos%i==0)){
+                nums[i] = 1;
+                res += dfs(nums, pos+1);
+                nums[i] = 0;
+            }
+        }
+        return res;
+    }
+};
