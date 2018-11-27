@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int shortestDistance(vector<vector<int>>& grid) {
+        vector<vector<int>> values(grid.size(), vector<int>(grid[0].size(), 0));
+        vector<pair<int,int>> house;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]>0) values[i][j] = -1;
+                if(grid[i][j]==1) house.push_back(make_pair(i,j));
+            }
+        }
+        unordered_set<int> visited;
+        int colNum = grid[0].size();
+        for(int i=0;i<house.size();i++){
+            queue<pair<int,int>> q;
+            q.push(house[i]);
+            int level = 1;
+            int size = q.size();
+            while(!q.empty()){
+                pair<int,int> p = q.front();
+                q.pop();
+                size--;
+                int dir1[4] = {1,-1,0,0};
+                int dir2[4] = {0,0,1,-1};
+                for(int i=0;i<4;i++){
+                    int y1 = p.first+dir1[i];
+                    int x1 = p.second+dir2[i];
+                    if(y1>=0 && y1<grid.size() && x1>=0 && x1<grid[0].size() && values[y1][x1]>=0 &&                        visited.find(y1*colNum+x1)==visited.end()){
+                        q.push(make_pair(y1,x1));
+                        values[y1][x1] += level;
+                        visited.insert(y1*colNum+x1);
+                    }
+                }
+                if(size==0){
+                    size = q.size();
+                    level++;
+                }
+            }
+            for(int i=0;i<grid.size();i++){
+                for(int j=0;j<grid[0].size();j++){
+                    //cout<<values[i][j]<<", ";
+                    if(visited.find(i*colNum+j) == visited.end()) values[i][j] = -1;
+                }
+                //cout<<endl;
+            }
+            visited.clear();
+        }
+        int res = -1;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(values[i][j]>=0)
+                    res = res<0?values[i][j]:min(res, values[i][j]);
+            }
+        }
+        return res;
+    }
+};
