@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int totalNQueens(int n) {
+        vector<vector<char>> board(n, vector<char>(n, '.'));
+        return dfs(board, 0, n);
+    }
+    
+    int dfs(vector<vector<char>>& board, int row, int n){
+        int res = 0;
+        if(n==row){
+            res=1;
+        } else{
+            for(int i=0;i<n;i++){
+                if(isValid(board, row, i, n)){
+                    board[row][i] = 'Q';
+                    res += dfs(board, row+1, n);
+                    board[row][i] = '.';
+                }
+            }
+        }
+        return res;
+    }
+    bool isValid(vector<vector<char>>& board, int y, int x, int n){
+        for(int i=1;i<=y;i++){
+            if(board[y-i][x] == 'Q') return false;
+            if(x-i>=0 && board[y-i][x-i] == 'Q') return false;
+            if(x+i<n && board[y-i][x+i] == 'Q') return false;
+        }
+        return true;
+    }
+};
