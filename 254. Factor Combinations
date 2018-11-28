@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> getFactors(int n) {
+        vector<vector<int>> result;
+        vector<int> vec;
+        if(n>1){
+            dfs(result, vec, 2, n);
+        }
+        return result;
+    }
+    
+    void dfs(vector<vector<int>>& result, vector<int>& res, int start, int left){
+        if(left == 1){
+            result.push_back(res);
+        } else{
+            for(int i=start;i<=sqrt(left);i++){
+                if(left%i==0){
+                    res.push_back(i);
+                    res.push_back(left/i);
+                    result.push_back(res);
+                    res.pop_back();
+                    dfs(result, res, i, left/i);
+                    res.pop_back();
+                }
+            }
+        }
+    }
+};
