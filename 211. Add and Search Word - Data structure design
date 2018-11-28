@@ -1,66 +1,59 @@
-class TrieNode{
-public:
-    char c = ' ';
-    unordered_map<char, TrieNode*> map;
-    TrieNode(char c){
-        this->c = c;
+class Node{
+    public:
+    char val;
+    unordered_map<char, Node*> children;
+    Node(char val){
+        this->val = val;
     }
 };
 
 class WordDictionary {
 public:
     /** Initialize your data structure here. */
-    TrieNode* root;
+    Node* root;
     WordDictionary() {
-        root = new TrieNode(' ');
+        root = new Node('#');
     }
     
     /** Adds a word into the data structure. */
-    void addWord(string word) {            
-        TrieNode* curNode = root;
+    void addWord(string word) {
+        Node* curNode = root;
         for(int i=0;i<word.size();i++){
-            char c = word[i];
-            if(curNode->map.find(c) == curNode->map.end()){
-                TrieNode* node = new TrieNode(c);
-                curNode->map[c] = node;
-                curNode = node;
+            if(curNode->children.find(word[i]) == curNode->children.end()){
+                Node* n = new Node(word[i]);
+                curNode->children[word[i]] = n;
+                curNode = n;
             } else{
-                curNode = curNode->map[c];
+                curNode = curNode->children[word[i]];
             }
         }
+        curNode->children['#'] = NULL;
     }
     
     /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
     bool search(string word) {
-        return searchHelper(root, word, 0);
+        return searchHelper(word, 0, root);
     }
     
-    bool searchHelper(TrieNode* node, string& word, int pos){
-        TrieNode* curNode = node;
-        for(int i=pos;i<word.size();i++){
-            char c = word[i];
-            if(c == '.'){
-                if(curNode->map.size()==0){
-                    return false;
+    bool searchHelper(string& word, int pos, Node* node){
+        bool res = false;
+        if(pos == word.size()){
+            if(node->children.find('#')!=node->children.end()) res = true;
+            else res = false;
+        } else{
+            if(word[pos]=='.'){
+                for(auto it=node->children.begin();it!=node->children.end();it++){
+                    if(it->first != '#')
+                        res = res || searchHelper(word, pos+1, it->second);
+                    if(res) break;
                 }
-                bool result = false;
-                for(auto it = curNode->map.begin();it!=curNode->map.end();it++){
-                    if(searchHelper(it->second, word, i+1)){
-                        //curNode = it->second;
-                        return true;
-                    }
-                }
-                return result;
             } else{
-                //cout<<curNode->c<<": "<<curNode->map.size()<<endl;
-                if(curNode->map.find(c) == curNode->map.end()){
-                    return false;
-                } else{
-                    curNode = curNode->map[c];
+                if(node->children.find(word[pos]) != node->children.end()){
+                    res = searchHelper(word, pos+1, node->children[word[pos]]);
                 }
             }
         }
-        return true;
+        return res;
     }
 };
 
