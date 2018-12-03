@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string replaceWords(vector<string>& dict, string sentence) {
+        unordered_set<string> set;
+        for(int i=0;i<dict.size();i++){
+            set.insert(dict[i]);
+        }
+        string result = "";
+        string word = "";
+        int i = 0;
+        while(i<=sentence.size()){
+            if(i<sentence.size() && isalpha(sentence[i])){
+                word.push_back(sentence[i]);
+                if(set.find(word) != set.end()){
+                    result.append(word);
+                    result.push_back(' ');
+                    i = sentence.find(" ", i);
+                    if(i==-1) break;
+                    //cout<<i<<endl;
+                    word = "";
+                } 
+            } else{
+                result.append(word);
+                result.push_back(' ');
+                word = "";
+            }
+            i++;
+        }
+        result.pop_back();
+        return result;
+    }
+};
