@@ -1,0 +1,53 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+public:
+    Node* treeToDoublyList(Node* root) {
+        if(root==NULL) return NULL;
+        pair<Node*, Node*> p = helper(root);
+        p.first->left = p.second;
+        p.second->right = p.first;
+        return p.first;
+    }
+    
+    pair<Node*, Node*> helper(Node* root){
+        pair<Node*, Node*> res;
+        if(root->left==NULL && root->right==NULL){
+            res = make_pair(root, root);
+        } else if(root->left == NULL){
+            pair<Node*, Node*> rp = helper(root->right);
+            root->right = rp.first;
+            rp.first->left = root;
+            res = make_pair(root, rp.second);
+        } else if(root->right == NULL){
+            pair<Node*, Node*> lp = helper(root->left);
+            lp.second->right = root;
+            root->left = lp.second;
+            res = make_pair(lp.first, root);
+        } else{
+            pair<Node*, Node*> rp = helper(root->right);
+            pair<Node*, Node*> lp = helper(root->left);
+            root->right = rp.first;
+            rp.first->left = root;
+            lp.second->right = root;
+            root->left = lp.second;
+            res = make_pair(lp.first, rp.second);
+        }
+        return res;
+    }
+};
