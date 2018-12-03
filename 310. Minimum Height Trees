@@ -1,0 +1,75 @@
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int N, vector<pair<int, int>>& edges) {
+        unordered_map<int, vector<int>> graph;
+        for(int i=0;i<N;i++){
+            vector<int> vec;
+            graph[i] = vec;
+        }
+        for(int i=0;i<edges.size();i++){
+            graph[edges[i].first].push_back(edges[i].second);
+            graph[edges[i].second].push_back(edges[i].first);
+        }
+        
+        int end1;
+        int end2;
+        queue<int> q1;
+        q1.push(0);
+        unordered_set<int> visited;
+        visited.insert(0);
+        while(!q1.empty()){
+            int n = q1.front();
+            q1.pop();
+            for(int i=0;i<graph[n].size();i++){
+                if(visited.find(graph[n][i]) == visited.end()){
+                    q1.push(graph[n][i]);
+                    visited.insert(graph[n][i]);
+                }
+            }
+            end1 = n;
+        }
+        
+        unordered_map<int,int> prevs;
+        queue<int> q2;
+        q2.push(end1);
+        int length = 0;
+        int size = 1;
+        visited.clear();
+        visited.insert(end1);
+        while(!q2.empty()){
+            int n = q2.front();
+            q2.pop();
+            size--;
+            for(int i=0;i<graph[n].size();i++){
+                if(visited.find(graph[n][i]) == visited.end()){
+                    q2.push(graph[n][i]);
+                    prevs[graph[n][i]] = n;
+                    visited.insert(graph[n][i]);
+                }
+            }
+            end2 = n;
+            if(size==0){
+                length++;
+                size = q2.size();
+            }
+        }
+        length--;
+        //cout<<end1<<", "<<end2<<", "<<length<<endl;
+        vector<int> result;
+        if(length%2 == 0){
+            int n = end2;
+            for(int i=0;i<length/2;i++){
+                n = prevs[n];
+            }
+            result.push_back(n);
+        } else{
+            int n = end2;
+            for(int i=0;i<length/2;i++){
+                n = prevs[n];
+            }
+            result.push_back(n);
+            result.push_back(prevs[n]);
+        }
+        return result;
+    }
+};
