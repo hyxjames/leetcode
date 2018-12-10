@@ -1,0 +1,32 @@
+class Solution {
+public:
+    class mycomparison{
+    public:
+    bool operator() (const pair<int,string> p1, const pair<int,string> p2){
+        if(p1.first==p2.first){
+            return p1.second<p2.second;
+        } else{
+            return p1.first>p2.first;
+        }
+    }
+};
+    
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string, int> map;
+        for(int i=0;i<words.size();i++){
+            map[words[i]]++;
+        }
+        priority_queue<pair<int,string>, vector<pair<int,string>>, mycomparison> pq;
+        for(auto it=map.begin();it!=map.end();it++){
+            pq.push(make_pair(it->second, it->first));
+            if(pq.size() > k) pq.pop();
+        }
+        vector<string> result;
+        while(!pq.empty()){
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+        reverse(result.begin(),result.end());
+        return result;
+    }
+};
