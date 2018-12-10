@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int index = helper(nums, 0, nums.size()-1);
+        return nums[index];
+    }
+    
+    int helper(vector<int>& nums, int begin, int end){
+        int mid = (begin+end)/2;
+        int prev = mid-1;
+        int next = mid+1;
+        if((prev>=0 && nums[prev]==nums[mid]) || (next<nums.size() && nums[next]==nums[mid])){
+            if(begin>=end){
+                return -1;
+            } else{
+                return max(helper(nums, begin, mid-1), helper(nums, mid+1, end));
+            }
+        } else{
+            return mid;
+        }
+    }
+};
