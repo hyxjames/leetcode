@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        for(int i=0;i<nums.size();i++){
+            sum += nums[i];
+        }
+        if(sum%2 != 0) return false;
+        int target = sum/2;
+        unordered_map<string, bool> memo;
+        return dfs(nums, target, 0, memo);
+    }
+    
+    bool dfs(vector<int>& nums, int target, int start, unordered_map<string,bool>& memo){
+        string key = generateKey(start, target);
+        if(memo.find(key) != memo.end()) return memo[key];
+        bool result = false;
+        if(target == 0){
+            result = true;
+        } else{
+            for(int i=start;i<nums.size();i++){
+                if(target >= nums[i]){
+                    result = dfs(nums, target-nums[i], i+1, memo);
+                }
+                if(result) break;
+            }
+        }
+        memo[key] = result;
+        return result;
+    }
+    
+    string generateKey(int start, int target){
+        return to_string(start)+","+to_string(target);
+    }
+};
