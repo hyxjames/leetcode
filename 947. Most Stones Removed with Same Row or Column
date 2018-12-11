@@ -1,0 +1,47 @@
+class Solution {
+public:
+    class UnionFind{
+        public:
+        vector<int> vec;
+        int N;
+        UnionFind(int N){
+            this->N = N;
+            for(int i=0;i<N;i++){
+                vec.push_back(i);
+            }
+        }
+        
+        int findParent(int n){
+            while(vec[n] != n){
+                n = vec[n];
+            }
+            return n;
+        }
+        
+        void uf(int n1, int n2){
+            int p1 = findParent(n1);
+            int p2 = findParent(n2);
+            if(p1 != p2){
+                vec[p1] = p2;
+                N--;
+            }
+        }
+    };
+    
+    int removeStones(vector<vector<int>>& stones) {
+        unordered_map<int,int> imap;
+        unordered_map<int,int> jmap;
+        UnionFind unionFind(stones.size());
+        for(int i=0;i<stones.size();i++){
+            if(imap.find(stones[i][0])!=imap.end()){
+                unionFind.uf(i,imap[stones[i][0]]);
+            }
+            if(jmap.find(stones[i][1])!=jmap.end()){
+                unionFind.uf(i,jmap[stones[i][1]]);
+            }
+            imap[stones[i][0]] = i;
+            jmap[stones[i][1]] = i;
+        }
+        return stones.size()-unionFind.N;
+    }
+};
