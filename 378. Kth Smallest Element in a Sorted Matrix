@@ -1,0 +1,51 @@
+class Solution {
+public:
+    class myComp{
+        public:
+        bool operator()(const vector<int>& v1, const vector<int>& v2){
+            return v1[0]>v2[0];
+        }
+    };
+    
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int curK = 0;
+        priority_queue<vector<int>, vector<vector<int>>, myComp> pq;
+        vector<int> initV;
+        initV.push_back(matrix[0][0]);
+        initV.push_back(0);
+        initV.push_back(0);
+        unordered_set<string> visited;
+        visited.insert(generateKey(0,0));
+        pq.push(initV);
+        while(!pq.empty()){
+            vector<int> node = pq.top();
+            pq.pop();
+            curK++;
+            //cout<<node[0]<<", "<<curK<<endl;
+            if(curK == k) return node[0];
+            if(node[2]+1<matrix[0].size() && visited.find(generateKey(node[1],node[2]+1))==visited.end()){
+                pair<int,int> right(node[1], node[2]+1);
+                visited.insert(generateKey(node[1],node[2]+1));
+                vector<int> rNode;
+                rNode.push_back(matrix[node[1]][node[2]+1]);
+                rNode.push_back(node[1]);
+                rNode.push_back(node[2]+1);
+                pq.push(rNode);
+            }
+            if(node[1]+1<matrix.size() && visited.find(generateKey(node[1]+1,node[2]))==visited.end()){
+                pair<int,int> right(node[1]+1, node[2]);
+                visited.insert(generateKey(node[1]+1,node[2]));
+                vector<int> lNode;
+                lNode.push_back(matrix[node[1]+1][node[2]]);
+                lNode.push_back(node[1]+1);
+                lNode.push_back(node[2]);
+                pq.push(lNode);
+            }
+        }
+        return -1;
+    }
+    
+    string generateKey(int i, int j){
+        return to_string(i)+","+to_string(j);
+    }
+};
