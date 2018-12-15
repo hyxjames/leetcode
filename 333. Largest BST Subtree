@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int largestBSTSubtree(TreeNode* root) {
+        int res = 0;
+        helper(root, res);
+        return res;
+    }
+    
+    vector<int> helper(TreeNode* root, int& res){ //return size, smallest, largest
+        vector<int> result;
+        if(root==NULL){
+            result.push_back(0);
+            result.push_back(INT_MAX);
+            result.push_back(INT_MIN);
+        } else{
+            vector<int> left;
+            vector<int> right;
+            left = helper(root->left, res);
+            right = helper(root->right, res);
+            if(left[2]<root->val && right[1]>root->val){
+                res = max(res, 1+left[0]+right[0]);
+                //cout<<root->val<<", "<<res<<endl;
+                result.push_back(1+left[0]+right[0]);
+                result.push_back(min(left[1], root->val));
+                result.push_back(max(right[2], root->val));
+            } else{
+                result.push_back(0);
+                result.push_back(INT_MIN);
+                result.push_back(INT_MAX);
+            }
+        }
+        return result;
+    }
+};
