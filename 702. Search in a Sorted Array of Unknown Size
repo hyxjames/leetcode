@@ -1,0 +1,45 @@
+// Forward declaration of ArrayReader class.
+class ArrayReader;
+
+class Solution {
+public:
+    int search(const ArrayReader& reader, int target) {
+        pair<int,int> range = findRange(reader, target);
+        //cout<<range.first<<","<<range.second<<endl;
+        return search(reader, target, range.first, range.second);
+    }
+    
+    pair<int,int> findRange(const ArrayReader& reader, int target){
+        pair<int,int> range = make_pair(0, INT_MAX);
+        int i=1;
+        while(reader.get(i) <= target){
+            range.first = i;
+            if(reader.get(i) == target){
+                //range.second = k;
+                break;
+            }
+            i = i*2;
+        }
+        range.second = i;
+        return range;
+    }
+    
+    int search(const ArrayReader& reader, int target, int start, int end){
+        if(start > end){
+            return -1;
+        } else if(start == end){
+            if(reader.get(start) == target) return start;
+            else return -1;
+        } else{
+            int mid = (start+end)/2;
+            int midval = reader.get(mid);
+            //cout<<mid<<", "<<midval<<endl;
+            if(midval == target) return mid;
+            else if(midval < target){
+                return search(reader, target, mid+1, end);
+            } else{
+                return search(reader, target, start, mid-1);
+            }
+        }
+    }
+};
