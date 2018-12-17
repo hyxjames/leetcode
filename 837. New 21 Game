@@ -1,0 +1,29 @@
+class Solution {
+public:
+    double new21Game(int N, int K, int W) {
+        unordered_map<int, double> memo;
+        return dfs(N, K, W, memo);
+    }
+    
+    double dfs(int N, int K, int W, unordered_map<int, double>& memo){
+        double result = 0;
+        //string key = getKey(N,K);
+        int key = N;
+        if(memo.find(key) != memo.end()) return memo[key];
+        if(K<=0 && N>=0){
+            result = 1;
+        } else if(N<0){
+            result = 0;
+        } else{
+            for(int i=1;i<=W;i++){
+                result += 1/(double)W*dfs(N-i, K-i, W, memo);
+            }
+        }
+        memo[key] = result;
+        return result;
+    }
+    
+    string getKey(int N, int K){
+        return to_string(N)+","+to_string(K);
+    }
+};
