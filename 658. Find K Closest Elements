@@ -1,0 +1,54 @@
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int src = 0;
+        if(x <= arr[0]){
+            src = 0;
+        } else if(x >= arr[arr.size()-1]){
+            src = arr.size()-1;
+        } else{
+            src = binarySearch(arr, x, 0, arr.size()-1);
+        }
+        vector<int> result;
+        result.push_back(arr[src]);
+        k--;
+        int i = src-1;
+        int j = src+1;
+        while(k>0){
+            k--;
+            if(i>=0 && j<arr.size()){
+                if(x-arr[i] <= arr[j]-x){
+                    result.insert(result.begin(),arr[i]);
+                    i--;
+                } else{
+                    result.push_back(arr[j]);
+                    j++;
+                }
+            } else if(i>=0){
+                result.insert(result.begin(),arr[i]);
+                i--;
+            } else if(j<arr.size()){
+                result.push_back(arr[j]);
+                j++;
+            } else{
+                break;
+            }
+        }
+        return result;
+    }
+    
+    int binarySearch(vector<int>& arr, int x, int begin, int end){
+        if(end<=begin){
+            return begin;
+        } else{
+            int mid = (begin+end)/2;
+            if(x>=arr[mid] && x<arr[mid+1]){
+                return mid;
+            } else if(x<arr[mid]){
+                return binarySearch(arr, x, begin, mid-1);
+            } else{
+                return binarySearch(arr, x, mid+1, end);
+            }
+        }
+    }
+};
