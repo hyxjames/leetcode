@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq; //value, list num, pointer
+        vector<int> result;
+        int maxNum = 0;
+        int minNum = INT_MAX;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i].size()==0) return result;
+            pq.push(make_pair(nums[i][0], make_pair(i,0)));
+            maxNum = max(maxNum, nums[i][0]);
+            minNum = min(minNum, nums[i][0]);
+        }
+        int res = maxNum-minNum;
+        result.push_back(minNum);
+        result.push_back(maxNum);
+        bool hasEnd = false;
+        while(!pq.empty()){
+            pair<int,pair<int,int>> p = pq.top();
+            //cout<<p.first<<"..........."<<endl;
+            pq.pop();
+            //cout<<p.first<<endl;
+            if(p.second.second < nums[p.second.first].size()-1){
+                if(!hasEnd){
+                    minNum = p.first;
+                }
+                //cout<<minNum<<","<<maxNum<<endl;
+                if(maxNum-minNum < res){
+                    res = maxNum-minNum;
+                    result[0] = minNum;
+                    result[1] = maxNum;
+                }
+                pq.push(make_pair(nums[p.second.first][p.second.second+1], make_pair(p.second.first, p.second.second+1)));
+                maxNum = max(maxNum, nums[p.second.first][p.second.second+1]);
+            } else{
+                if(maxNum-minNum < res){
+                    res = maxNum-minNum;
+                    result[0] = minNum;
+                    result[1] = maxNum;
+                }
+                if(!hasEnd){
+                    minNum = p.first;
+                }
+                hasEnd = true;
+            }
+        }
+        return result;
+    }
+};
