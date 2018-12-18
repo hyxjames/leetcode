@@ -1,0 +1,29 @@
+class MyCalendarThree {
+public:
+    map<int, int> boundaryCnt;
+    int res = 0;
+    
+    MyCalendarThree() {
+        
+    }
+    
+    int book(int start, int end) {
+        boundaryCnt[start]++;
+        boundaryCnt[end]--;
+        int cnt = 0;
+        for(auto it=boundaryCnt.begin();it!=boundaryCnt.end();it++){
+            cnt += it->second;
+            res = max(res, cnt);
+            if(it->first >= end){
+                break;
+            }
+        }
+        return res;
+    }
+};
+
+/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree obj = new MyCalendarThree();
+ * int param_1 = obj.book(start,end);
+ */
