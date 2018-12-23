@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string parseTernary(string expression) {
+        int pos = 0;
+        return helper(expression, pos);
+    }
+    
+    string helper(string& expression, int& pos){
+        string result = "";
+        for(int i=pos;i<expression.size();i++){
+            //nested
+            if((expression[pos]=='T'||expression[pos]=='F') && pos<expression.size()-1 && expression[pos+1]=='?'){
+                char isTrue = expression[pos];
+                pos += 2;
+                string res1 = helper(expression, pos);
+                pos++;
+                string res2 = helper(expression, pos);
+                if(isTrue == 'T'){
+                    result = res1;
+                } else{
+                    result = res2;
+                }
+            } else{
+                while(expression[pos] != ':' && pos<expression.size()){
+                    result.push_back(expression[pos]);
+                    pos++;
+                }
+                break;
+            }
+        }
+        return result;
+    }
+};
