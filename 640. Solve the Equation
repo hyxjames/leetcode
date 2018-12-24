@@ -1,0 +1,54 @@
+class Solution {
+public:
+    string solveEquation(string equation) {
+        int pos = 0;
+        pair<int,int> left = helper(equation, pos);
+        pos++;
+        pair<int,int> right = helper(equation, pos);
+        int variable = left.first-right.first;
+        int value = right.second-left.second;
+        if(variable==0){
+            if(value==0){
+                return "Infinite solutions";
+            } else{
+                return "No solution";
+            }
+        } else{
+            string result = "x=";
+            result.append(to_string(value/variable));
+            return result;
+        }
+    }
+    
+    pair<int, int> helper(string equation, int& pos){
+        int value = 0;
+        int variable = 0;
+        while(pos<equation.size() && equation[pos]!='='){
+            int num = 0;
+            bool isDefault = true;
+            bool isPos = true;
+            if(equation[pos]=='+'){
+                isPos = true;
+                pos++;
+            } else if(equation[pos]=='-'){
+                isPos = false;
+                pos++;
+            }
+            while(isdigit(equation[pos])){
+                isDefault = false;
+                num = num*10+equation[pos]-'0';
+                pos++;
+            }
+            if(isDefault) num=1;
+            if(equation[pos] == 'x'){
+                if(isPos) variable += num;
+                else variable -= num;
+                pos++;
+            } else{
+                if(isPos) value += num;
+                else value -= num;
+            }
+        }
+        return make_pair(variable, value);
+    }
+};
