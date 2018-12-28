@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool hasAlternatingBits(int n) {
+        bool isLeadingZero = true;
+        for(int i=31;i>=0;i--){
+            if(isLeadingZero){
+                if(((n>>i)&1) == 1){
+                    isLeadingZero = false;
+                }
+            } else{
+                if(i!=31){
+                    if(((n>>i)&1) == ((n>>(i+1))&1)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
