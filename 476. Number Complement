@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int findComplement(int num) {
+        int res = 0;
+        bool isLeadingZero = true;
+        for(int i=31;i>=0;i--){
+            if(((num>>i)&1) == 1){
+                isLeadingZero = false;
+            } else{
+                if(!isLeadingZero){
+                    res += 1<<i;
+                }
+            }
+        }
+        return res;
+    }
+};
