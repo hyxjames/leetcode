@@ -1,0 +1,74 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* sortList(struct ListNode* head) {
+    if(head==NULL || head->next==NULL) return head;
+    struct ListNode* fast = head;
+    struct ListNode* slow = head;
+    while(fast!=NULL && fast->next!=NULL){
+        fast = fast->next->next;
+        if(fast!=NULL && fast->next!=NULL){
+            slow = slow->next;
+        } else{
+            struct ListNode* temp = slow->next;
+            slow->next = NULL;
+            slow = temp;
+        }
+    }
+    //printf("%d, %d: ", head->val, slow->val);
+    struct ListNode* left = sortList(head);
+    struct ListNode* right = sortList(slow);
+    
+    struct ListNode* cur = NULL;
+    struct ListNode* result = NULL;
+    while(left!=NULL && right!=NULL){
+        if(cur==NULL){
+            if(left->val < right->val){
+                cur = left;
+                result = left;
+                left = left->next;
+            } else{
+                cur = right;
+                result = right;
+                right = right->next;
+            }
+        } else{
+            if(left->val < right->val){
+                cur->next = left;
+                cur = cur->next;
+                left = left->next;
+            } else{
+                cur->next = right;
+                cur = cur->next;
+                right = right->next;
+            }
+        }
+    }
+    while(left!=NULL){
+        if(cur==NULL){
+            cur = left;
+            result = left;
+            left = left->next;
+        } else{
+            cur->next = left;
+            cur = cur->next;
+            left = left->next;
+        }
+    }
+    while(right != NULL){
+        if(cur==NULL){
+            cur = right;
+            result = right;
+            right = right->next;
+        } else{
+            cur->next = right;
+            cur = cur->next;
+            right = right->next;
+        }
+    }
+    return result;
+}
