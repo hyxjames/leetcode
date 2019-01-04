@@ -1,0 +1,36 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode* partition(struct ListNode* head, int x) {
+    if(head == NULL) return head;
+    struct ListNode* prev = NULL;
+    struct ListNode* partition = head;
+    while(partition!=NULL && partition->val < x){
+        prev = partition;
+        partition = partition->next;
+    }
+    if(partition==NULL) return head;
+    
+    struct ListNode* cur = partition;
+    while(cur!=NULL && cur->next!=NULL){
+        if(cur->next->val < x){
+            struct ListNode* target = cur->next;
+            cur->next = cur->next->next;
+            target->next = partition;
+            if(prev==NULL){
+                prev = target;
+                head = target;
+            } else{
+                prev->next = target;
+                prev = prev->next;
+            }
+        } else{
+            cur = cur->next;
+        }
+    }
+    return head;
+}
