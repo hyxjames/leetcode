@@ -1,0 +1,42 @@
+class Vector2D {
+public:
+    int line = 0;
+    int pos = 0;
+    vector<vector<int>> vec2d;
+    
+    Vector2D(vector<vector<int>>& vec2d) {
+        this->vec2d = vec2d;
+    }
+
+    int next() {
+        int res = vec2d[line][pos];
+        pos++;
+        if(pos == vec2d[line].size()){
+            line++;
+            pos = 0;
+        }
+        //cout<<res<<", "<<line<<", "<<pos<<endl;
+        return res;
+    }
+
+    bool hasNext() {
+        if(vec2d.size()==0) return false;
+        if(vec2d[line].size()==0){
+            line++;
+            return hasNext();
+        }
+        if(line<vec2d.size()-1){
+            return true;
+        } else if(line==vec2d.size()-1){
+            return pos<vec2d[vec2d.size()-1].size();
+        } else{
+            return false;
+        }
+    }
+};
+
+/**
+ * Your Vector2D object will be instantiated and called as such:
+ * Vector2D i(vec2d);
+ * while (i.hasNext()) cout << i.next();
+ */
