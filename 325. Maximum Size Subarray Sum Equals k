@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int maxSubArrayLen(vector<int>& nums, int k) {
+        unordered_map<int,int> map;//presum, first appearance
+        int presum = 0;
+        int result = 0;
+        for(int i=0;i<nums.size();i++){
+            presum += nums[i];
+            if(map.find(presum) == map.end()){
+                map[presum] = i;
+            } 
+            if(presum==k) result = max(result, i+1);
+            if(map.find(presum-k) != map.end()){
+                result = max(result, i-map[presum-k]);
+            }
+        }
+        return result;
+    }
+};
